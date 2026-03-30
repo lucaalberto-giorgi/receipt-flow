@@ -1,6 +1,12 @@
 const categories = ['Meals', 'Travel', 'Office', 'Software', 'Supplies']
 
-function ExtractedExpenseForm({ formData, hasFile, onChange, onSubmit }) {
+function ExtractedExpenseForm({
+  canSave,
+  formData,
+  hasFile,
+  onChange,
+  onSubmit,
+}) {
   return (
     <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -107,7 +113,7 @@ function ExtractedExpenseForm({ formData, hasFile, onChange, onSubmit }) {
 
         <button
           type="submit"
-          disabled={!hasFile}
+          disabled={!canSave}
           className="inline-flex w-full items-center justify-center rounded-2xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-[0_18px_32px_-20px_rgba(124,58,237,0.9)] transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-violet-200 disabled:shadow-none"
         >
           Save Expense

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ExtractedExpenseForm from '../components/upload-receipt/ExtractedExpenseForm'
 import ReceiptUploader from '../components/upload-receipt/ReceiptUploader'
+import { useExpenses } from '../context/ExpensesContext'
 
 const EMPTY_FORM = {
   merchant: '',
@@ -19,6 +21,8 @@ const SAMPLE_RECEIPT_DATA = {
 }
 
 function UploadReceipt() {
+  const navigate = useNavigate()
+  const { addExpense } = useExpenses()
   const inputRef = useRef(null)
   const [selectedFile, setSelectedFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('')
@@ -36,6 +40,47 @@ function UploadReceipt() {
 
     return () => URL.revokeObjectURL(objectUrl)
   }, [selectedFile])
+
+  const canSaveExpense =
+    Boolean(selectedFile) &&
+    formData.merchant.trim() &&
+    formData.amount &&
+    formData.date &&
+    formData.category
+
+  function resetUploadState() {
+    setSelectedFile(null)
+    setPreviewUrl('')
+    setIsDragOver(false)
+    setFormData(EMPTY_FORM)
+  }
+
+  function formatCurrencyAmount(amount) {
+    const numericAmount = Number.parseFloat(amount)
+
+    if (Number.isNaN(numericAmount)) {
+      return '$0.00'
+    }
+
+    return `$${numericAmount.toFixed(2)}`
+  }
+
+  function createExpensePayload() {
+    const fallbackId = `exp-${Date.now()}`
+    const uniqueId = globalThis.crypto?.randomUUID?.() ?? fallbackId
+    const referenceNumber = String(Date.now()).slice(-4)
+
+    return {
+      id: uniqueId,
+      merchant: formData.merchant.trim(),
+      date: formData.date,
+      amount: formatCurrencyAmount(formData.amount),
+      category: formData.category,
+      notes: formData.notes.trim(),
+      status: 'Pending',
+      reference: `RCPT-${referenceNumber}`,
+    }
+  }
 
   function applyMockExtraction(file) {
     setSelectedFile(file)
@@ -88,6 +133,14 @@ function UploadReceipt() {
 
   function handleSubmit(event) {
     event.preventDefault()
+
+    if (!canSaveExpense) {
+      return
+    }
+
+    addExpense(createExpensePayload())
+    resetUploadState()
+    navigate('/expenses')
   }
 
   return (
@@ -125,6 +178,7 @@ function UploadReceipt() {
         />
 
         <ExtractedExpenseForm
+          canSave={Boolean(canSaveExpense)}
           formData={formData}
           hasFile={Boolean(selectedFile)}
           onChange={handleInputChange}

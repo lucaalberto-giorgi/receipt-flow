@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import ExpensesFilters from '../components/expenses/ExpensesFilters'
 import ExpensesTable from '../components/expenses/ExpensesTable'
-import { mockExpenses } from '../data/mockExpenses'
+import { useExpenses } from '../context/ExpensesContext'
 
 function Expenses() {
+  const { expenses } = useExpenses()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All categories')
 
-  const categories = ['All categories', ...new Set(mockExpenses.map((expense) => expense.category))]
+  const categories = ['All categories', ...new Set(expenses.map((expense) => expense.category))]
 
-  const filteredExpenses = mockExpenses.filter((expense) => {
+  const filteredExpenses = expenses.filter((expense) => {
     const matchesSearch = expense.merchant
       .toLowerCase()
       .includes(searchTerm.trim().toLowerCase())
