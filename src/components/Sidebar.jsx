@@ -13,8 +13,22 @@ function Sidebar() {
     <aside className="fixed inset-y-0 left-0 z-30 w-24 p-4 md:w-80 md:p-6">
       <div className="flex h-full flex-col rounded-[28px] border border-white/90 bg-white/92 p-4 shadow-[0_24px_50px_-38px_rgba(15,23,42,0.35)] backdrop-blur md:p-5">
         <div className="mb-8 flex items-center gap-3 px-1">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-sm font-semibold text-white shadow-[0_18px_30px_-18px_rgba(124,58,237,0.8)]">
-            RF
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M8.5 3.5h5l4 4v11a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z" />
+              <path d="M13.5 3.5v4h4" />
+              <path d="M9.5 11.5h5" />
+              <path d="M9.5 15h5" />
+            </svg>
           </div>
 
           <div className="hidden md:block">
