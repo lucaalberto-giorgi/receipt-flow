@@ -82,10 +82,10 @@ function ExpensesTable({ expenses }) {
         {expenses.length === 0 && (
           <div className="px-6 py-16 text-center">
             <p className="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-              No matching expenses
+              No expenses found.
             </p>
             <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              Try a different merchant name or clear the category filter.
+              Try a different search term or clear the category filter.
             </p>
           </div>
         )}

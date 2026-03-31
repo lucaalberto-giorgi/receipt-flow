@@ -2,6 +2,7 @@ import { useState } from 'react'
 import ExpensesFilters from '../components/expenses/ExpensesFilters'
 import ExpensesTable from '../components/expenses/ExpensesTable'
 import { useExpenses } from '../context/ExpensesContext'
+import exportExpensesCsv from '../utils/exportExpensesCsv'
 
 function Expenses() {
   const { expenses } = useExpenses()
@@ -11,15 +12,22 @@ function Expenses() {
   const categories = ['All categories', ...new Set(expenses.map((expense) => expense.category))]
 
   const filteredExpenses = expenses.filter((expense) => {
-    const matchesSearch = expense.merchant
-      .toLowerCase()
-      .includes(searchTerm.trim().toLowerCase())
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase()
+    const matchesSearch =
+      normalizedSearchTerm === '' ||
+      [expense.merchant, expense.category, expense.date].some((value) =>
+        String(value).toLowerCase().includes(normalizedSearchTerm),
+      )
     const matchesCategory =
       selectedCategory === 'All categories' ||
       expense.category === selectedCategory
 
     return matchesSearch && matchesCategory
   })
+
+  function handleExportCsv() {
+    exportExpensesCsv(filteredExpenses)
+  }
 
   return (
     <section className="space-y-6">
@@ -37,8 +45,18 @@ function Expenses() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
-          {filteredExpenses.length} expense{filteredExpenses.length === 1 ? '' : 's'}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+          >
+            Export CSV
+          </button>
+
+          <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+            {filteredExpenses.length} expense{filteredExpenses.length === 1 ? '' : 's'}
+          </div>
         </div>
       </div>
 

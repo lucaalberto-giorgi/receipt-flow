@@ -40,6 +40,7 @@ ALLOWED_CONTENT_TYPES = {
 }
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".pdf"}
+EXPENSE_CATEGORIES = {"Food", "Travel", "Shopping", "Utilities", "Entertainment", "Other"}
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 client = OpenAI() if OpenAI is not None and OPENAI_API_KEY else None
@@ -52,10 +53,12 @@ Return only valid JSON in this shape:
   "merchant": "string",
   "date": "YYYY-MM-DD",
   "total": 0.0,
+  "category": "Food",
   "items": [{"name": "string", "price": 0.0}]
 }
 
 Use the text as the source of truth. Do not include extra fields.
+Category must be one of: Food, Travel, Shopping, Utilities, Entertainment, Other.
 """
 
 
@@ -85,6 +88,7 @@ def extract_with_ai(extracted_text: str) -> dict | None:
     merchant = parsed.get("merchant")
     date = parsed.get("date")
     total = parsed.get("total")
+    category = parsed.get("category")
     items = parsed.get("items")
 
     if not isinstance(merchant, str) or not merchant.strip():
@@ -96,6 +100,9 @@ def extract_with_ai(extracted_text: str) -> dict | None:
     try:
         total = float(total)
     except (TypeError, ValueError):
+        return None
+
+    if not isinstance(category, str) or category not in EXPENSE_CATEGORIES:
         return None
 
     if not isinstance(items, list):
@@ -122,6 +129,7 @@ def extract_with_ai(extracted_text: str) -> dict | None:
         "merchant": merchant.strip(),
         "date": date,
         "total": total,
+        "category": category,
         "items": normalized_items,
     }
 
@@ -213,6 +221,8 @@ async def extract_receipt(file: UploadFile | None = File(None)):
     if total_match:
         total = float(total_match.group(1).replace(",", "."))
 
+    category = "Other"
+
     fallback_items = [
         {"name": "Milk", "price": 1.50},
         {"name": "Bread", "price": 1.20},
@@ -246,6 +256,7 @@ async def extract_receipt(file: UploadFile | None = File(None)):
         merchant = ai_receipt["merchant"]
         date = ai_receipt["date"]
         total = ai_receipt["total"]
+        category = ai_receipt["category"]
         items = ai_receipt["items"] or items
 
     return {
@@ -253,6 +264,7 @@ async def extract_receipt(file: UploadFile | None = File(None)):
         "merchant": merchant,
         "date": date,
         "total": total,
+        "category": category,
         "currency": "GBP",
         "raw_text_preview": extracted_text[:200],
         "items": items,

@@ -10,13 +10,13 @@ function ExpensesFilters({
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end">
         <label className="block flex-1">
           <span className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Search by merchant
+            Search expenses
           </span>
           <input
             type="search"
             value={searchTerm}
             onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search merchants"
+            placeholder="Search expenses..."
             className="w-full rounded-2xl border border-violet-100 bg-violet-50/35 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-violet-400 dark:focus:bg-slate-800 dark:focus:ring-slate-700"
           />
         </label>

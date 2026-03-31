@@ -107,7 +107,7 @@ function UploadReceipt() {
         amount:
           extractedReceipt.total != null ? String(extractedReceipt.total) : '',
         date: extractedReceipt.date ?? '',
-        category: currentData.category || 'Meals',
+        category: extractedReceipt.category ?? 'Other',
         notes:
           extractedReceipt.items?.map((item) => item.name).join(', ') ?? '',
       }))

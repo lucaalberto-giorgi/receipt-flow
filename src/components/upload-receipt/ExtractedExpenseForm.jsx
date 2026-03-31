@@ -1,4 +1,11 @@
-const categories = ['Meals', 'Travel', 'Office', 'Software', 'Supplies']
+const categories = [
+  'Food',
+  'Travel',
+  'Shopping',
+  'Utilities',
+  'Entertainment',
+  'Other',
+]
 
 function ExtractedExpenseForm({
   canSave,
