@@ -43,21 +43,21 @@ function Dashboard() {
 
   return (
     <section className="space-y-6">
-      <div className="flex flex-col gap-3 border-b border-violet-100/80 pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-violet-100/80 pb-5 dark:border-slate-700 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
             Expense Overview
           </p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             Dashboard
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-slate-500">
+          <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
             Monitor receipts flowing into the workspace and keep an eye on the
             latest review activity.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)]">
+        <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
           Live shared expense state
         </div>
       </div>
@@ -90,30 +90,30 @@ function Dashboard() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-        <section className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] sm:p-6">
+        <section className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
             Top Category
           </p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             {topCategoryName}
           </h3>
-          <p className="mt-3 max-w-md text-sm leading-6 text-slate-500">
+          <p className="mt-3 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
             The most common expense category in the current shared state,
             updating automatically as new receipts are saved.
           </p>
 
-          <div className="mt-6 rounded-[24px] border border-violet-100 bg-violet-50/70 p-5">
+          <div className="mt-6 rounded-[24px] border border-violet-100 bg-violet-50/70 p-5 dark:border-slate-700 dark:bg-slate-800">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="text-sm font-medium text-slate-600">
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
                   Expense count
                 </p>
-                <p className="mt-2 text-4xl font-semibold tracking-tight text-slate-900">
+                <p className="mt-2 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
                   {topCategoryCount}
                 </p>
               </div>
 
-              <span className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-violet-700">
+              <span className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-violet-700 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300">
                 Leading category
               </span>
             </div>

@@ -4,14 +4,14 @@ import Topbar from './Topbar'
 
 function Layout() {
   return (
-    <div className="min-h-screen text-slate-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Sidebar />
 
-      <div className="pl-24 md:pl-80">
-        <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-6">
+      <div className="pl-28 md:pl-[19rem]">
+        <div className="flex min-h-screen flex-col px-4 py-4 sm:px-5 sm:py-5">
           <Topbar />
 
-          <main className="mt-5 flex-1 rounded-[28px] border border-violet-100/80 bg-white/90 p-5 shadow-[0_28px_60px_-42px_rgba(76,29,149,0.35)] backdrop-blur sm:p-8">
+          <main className="mt-4 flex-1 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.18)] dark:border-slate-700 dark:bg-slate-900 sm:p-7">
             <Outlet />
           </main>
         </div>

@@ -23,21 +23,21 @@ function Expenses() {
 
   return (
     <section className="space-y-6">
-      <div className="flex flex-col gap-3 border-b border-violet-100/80 pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-violet-100/80 pb-5 dark:border-slate-700 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
             Expense Ledger
           </p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             Expenses
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-slate-500">
+          <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
             Review submitted receipts, scan the latest activity, and narrow the
             list with quick filters.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)]">
+        <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
           {filteredExpenses.length} expense{filteredExpenses.length === 1 ? '' : 's'}
         </div>
       </div>

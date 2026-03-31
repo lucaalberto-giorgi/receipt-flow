@@ -25,13 +25,13 @@ function DashboardSummaryCard({ accent = 'violet', eyebrow, title, value }) {
   const styles = accentStyles[accent] ?? accentStyles.violet
 
   return (
-    <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] sm:p-6">
+    <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
             {eyebrow}
           </p>
-          <h3 className="mt-2 text-sm font-medium text-slate-600">{title}</h3>
+          <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">{title}</h3>
         </div>
 
         <div
@@ -41,7 +41,7 @@ function DashboardSummaryCard({ accent = 'violet', eyebrow, title, value }) {
         </div>
       </div>
 
-      <p className="mt-8 text-4xl font-semibold tracking-tight text-slate-900">
+      <p className="mt-8 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
         {value}
       </p>
 

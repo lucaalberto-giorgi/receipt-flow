@@ -1,11 +1,11 @@
 function Categories() {
   return (
-    <section className="flex min-h-[420px] items-center justify-center rounded-[24px] border border-dashed border-violet-200 bg-violet-50/60 p-8">
+    <section className="flex min-h-[420px] items-center justify-center rounded-[24px] border border-dashed border-violet-200 bg-violet-50/60 p-8 dark:border-slate-700 dark:bg-slate-800">
       <div className="text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
           Main Content
         </p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
           Categories
         </h2>
       </div>
