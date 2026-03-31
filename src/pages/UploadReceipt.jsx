@@ -5,6 +5,7 @@ import ReceiptUploader from '../components/upload-receipt/ReceiptUploader'
 import { useExpenses } from '../context/ExpensesContext'
 
 const API_URL = import.meta.env.VITE_API_URL
+console.log(API_URL)
 
 const EMPTY_FORM = {
   merchant: '',
@@ -21,6 +22,8 @@ function UploadReceipt() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('')
   const [isDragOver, setIsDragOver] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
   const [formData, setFormData] = useState(EMPTY_FORM)
 
   useEffect(() => {
@@ -46,6 +49,8 @@ function UploadReceipt() {
     setSelectedFile(null)
     setPreviewUrl('')
     setIsDragOver(false)
+    setIsUploading(false)
+    setUploadError('')
     setFormData(EMPTY_FORM)
   }
 
@@ -77,30 +82,40 @@ function UploadReceipt() {
   }
 
   async function applyMockExtraction(file) {
-    console.log('applyMockExtraction called', file)
     setSelectedFile(file)
+    setUploadError('')
+    setIsUploading(true)
 
     const requestBody = new FormData()
     requestBody.append('file', file)
 
-    const response = await fetch(`${API_URL}/extract-receipt`, {
-      method: 'POST',
-      body: requestBody,
-    })
+    try {
+      const response = await fetch(`${API_URL}/extract-receipt`, {
+        method: 'POST',
+        body: requestBody,
+      })
 
-    const extractedReceipt = await response.json()
-    console.log('extract response:', extractedReceipt)
+      if (!response.ok) {
+        throw new Error('Request failed')
+      }
 
-    setFormData((currentData) => ({
-      ...currentData,
-      merchant: extractedReceipt.merchant ?? '',
-      amount:
-        extractedReceipt.total != null ? String(extractedReceipt.total) : '',
-      date: extractedReceipt.date ?? '',
-      category: currentData.category || 'Meals',
-      notes:
-        extractedReceipt.items?.map((item) => item.name).join(', ') ?? '',
-    }))
+      const extractedReceipt = await response.json()
+
+      setFormData((currentData) => ({
+        ...currentData,
+        merchant: extractedReceipt.merchant ?? '',
+        amount:
+          extractedReceipt.total != null ? String(extractedReceipt.total) : '',
+        date: extractedReceipt.date ?? '',
+        category: currentData.category || 'Meals',
+        notes:
+          extractedReceipt.items?.map((item) => item.name).join(', ') ?? '',
+      }))
+    } catch {
+      setUploadError('Unable to extract receipt right now. Please try again.')
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   async function handleFileSelect(file) {
@@ -173,9 +188,17 @@ function UploadReceipt() {
         </div>
 
         <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)]">
-          {selectedFile ? 'Mock extraction ready' : 'Waiting for upload'}
+          {isUploading
+            ? 'Uploading receipt...'
+            : selectedFile
+              ? 'Mock extraction ready'
+              : 'Waiting for upload'}
         </div>
       </div>
+
+      {uploadError ? (
+        <p className="text-sm text-rose-600">{uploadError}</p>
+      ) : null}
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)]">
         <ReceiptUploader
