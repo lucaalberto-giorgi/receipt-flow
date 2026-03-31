@@ -11,6 +11,7 @@ function ExtractedExpenseForm({
   canSave,
   formData,
   hasFile,
+  isUploading,
   onChange,
   onSubmit,
 }) {
@@ -48,6 +49,7 @@ function ExtractedExpenseForm({
           <input
             type="text"
             name="merchant"
+            disabled={isUploading}
             value={formData.merchant}
             onChange={onChange}
             placeholder="Merchant name"
@@ -63,6 +65,7 @@ function ExtractedExpenseForm({
             <input
               type="number"
               name="amount"
+              disabled={isUploading}
               step="0.01"
               value={formData.amount}
               onChange={onChange}
@@ -78,6 +81,7 @@ function ExtractedExpenseForm({
             <input
               type="date"
               name="date"
+              disabled={isUploading}
               value={formData.date}
               onChange={onChange}
               className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-violet-400 dark:focus:ring-slate-700"
@@ -91,6 +95,7 @@ function ExtractedExpenseForm({
           </span>
           <select
             name="category"
+            disabled={isUploading}
             value={formData.category}
             onChange={onChange}
             className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-violet-400 dark:focus:ring-slate-700"
@@ -110,6 +115,7 @@ function ExtractedExpenseForm({
           </span>
           <textarea
             name="notes"
+            disabled={isUploading}
             value={formData.notes}
             onChange={onChange}
             placeholder="Add any context for this expense"
@@ -120,14 +126,14 @@ function ExtractedExpenseForm({
 
         <button
           type="submit"
-          disabled={!canSave}
+          disabled={!canSave || isUploading}
           className={`inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold transition ${
-            canSave
+            canSave && !isUploading
               ? 'bg-violet-600 text-white shadow-[0_18px_32px_-20px_rgba(124,58,237,0.9)] hover:bg-violet-700'
               : 'cursor-not-allowed bg-slate-200 text-slate-500 shadow-none dark:bg-slate-700 dark:text-slate-400'
           }`}
         >
-          Save Expense
+          {isUploading ? 'Extracting receipt...' : 'Save Expense'}
         </button>
       </form>
     </article>

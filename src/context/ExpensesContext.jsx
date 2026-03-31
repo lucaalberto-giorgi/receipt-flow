@@ -1,9 +1,20 @@
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 const ExpensesContext = createContext(null)
 
 function ExpensesProvider({ children }) {
   const [expenses, setExpenses] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const frameId = globalThis.requestAnimationFrame(() => {
+      setIsLoading(false)
+    })
+
+    return () => {
+      globalThis.cancelAnimationFrame?.(frameId)
+    }
+  }, [])
 
   function addExpense(expense) {
     setExpenses((currentExpenses) => [expense, ...currentExpenses])
@@ -18,10 +29,11 @@ function ExpensesProvider({ children }) {
   const value = useMemo(
     () => ({
       expenses,
+      isLoading,
       addExpense,
       removeExpense,
     }),
-    [expenses],
+    [expenses, isLoading],
   )
 
   return (

@@ -118,7 +118,7 @@ function UploadReceipt() {
   }
 
   async function handleFileSelect(file) {
-    if (!file) {
+    if (!file || isUploading) {
       return
     }
 
@@ -134,6 +134,10 @@ function UploadReceipt() {
   }
 
   function handleBrowseClick() {
+    if (isUploading) {
+      return
+    }
+
     inputRef.current?.click()
   }
 
@@ -144,6 +148,11 @@ function UploadReceipt() {
 
   function handleDragOver(event) {
     event.preventDefault()
+
+    if (isUploading) {
+      return
+    }
+
     setIsDragOver(true)
   }
 
@@ -155,6 +164,11 @@ function UploadReceipt() {
   function handleDrop(event) {
     event.preventDefault()
     setIsDragOver(false)
+
+    if (isUploading) {
+      return
+    }
+
     handleFileSelect(event.dataTransfer.files?.[0] ?? null)
   }
 
@@ -188,7 +202,7 @@ function UploadReceipt() {
 
         <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
           {isUploading
-            ? 'Uploading receipt...'
+            ? 'Extracting receipt...'
             : selectedFile
               ? 'Receipt parsed'
               : 'Waiting for upload'}
@@ -210,12 +224,14 @@ function UploadReceipt() {
           onFileInputChange={handleFileInputChange}
           previewUrl={previewUrl}
           selectedFile={selectedFile}
+          isUploading={isUploading}
         />
 
         <ExtractedExpenseForm
           canSave={Boolean(canSaveExpense)}
           formData={formData}
           hasFile={Boolean(selectedFile)}
+          isUploading={isUploading}
           onChange={handleInputChange}
           onSubmit={handleSubmit}
         />
