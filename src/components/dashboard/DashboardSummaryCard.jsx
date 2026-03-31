@@ -25,7 +25,7 @@ function DashboardSummaryCard({ accent = 'violet', eyebrow, title, value }) {
   const styles = accentStyles[accent] ?? accentStyles.violet
 
   return (
-    <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+    <article className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
@@ -35,18 +35,18 @@ function DashboardSummaryCard({ accent = 'violet', eyebrow, title, value }) {
         </div>
 
         <div
-          className={`flex h-12 w-12 items-center justify-center rounded-2xl text-sm font-semibold ${styles.icon}`}
+          className={`flex h-11 w-11 items-center justify-center rounded-xl text-sm font-semibold ${styles.icon} sm:h-12 sm:w-12 sm:rounded-2xl`}
         >
           {title.charAt(0)}
         </div>
       </div>
 
-      <p className="mt-8 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+      <p className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:mt-8 sm:text-4xl">
         {value}
       </p>
 
       <span
-        className={`mt-5 inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${styles.badge}`}
+        className={`mt-4 inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] sm:mt-5 ${styles.badge}`}
       >
         Shared state
       </span>
