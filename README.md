@@ -37,16 +37,13 @@ npm install
 npm run dev
 ```
 
-## Screenshots
+## 📸 Screenshots
 
 ### Dashboard
-
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](screenshots/dashboard.png)
 
 ### Upload Receipt
+![Upload](screenshots/upload.png)
 
-![Upload Receipt](./screenshots/upload.png)
-
-### Expenses
-
-![Expenses](./screenshots/expenses.png)
+### Expenses & Analytics
+![Expenses](screenshots/expenses.png)
