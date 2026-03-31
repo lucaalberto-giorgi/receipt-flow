@@ -51,7 +51,7 @@ client = (
 
 allow_origins = [
     "http://localhost:5173",
-    "https://receipt-flow.vercel.app",
+    "https://receipt-flow-neon.vercel.app",
 ]
 
 
