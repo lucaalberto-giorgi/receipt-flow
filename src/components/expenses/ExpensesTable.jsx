@@ -13,7 +13,7 @@ function StatusBadge({ status }) {
   )
 }
 
-function ExpensesTable({ expenses }) {
+function ExpensesTable({ expenses, onDeleteExpense }) {
   return (
     <section className="overflow-hidden rounded-[28px] border border-violet-100/80 bg-white shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900">
       <div className="flex items-center justify-between border-b border-violet-100/80 px-5 py-4 dark:border-slate-700 sm:px-6">
@@ -46,6 +46,9 @@ function ExpensesTable({ expenses }) {
               <th className="px-5 py-4 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400 sm:px-6">
                 Status
               </th>
+              <th className="px-5 py-4 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400 sm:px-6">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -73,6 +76,16 @@ function ExpensesTable({ expenses }) {
                 </td>
                 <td className="px-5 py-4 sm:px-6">
                   <StatusBadge status={expense.status} />
+                </td>
+                <td className="px-5 py-4 sm:px-6">
+                  <button
+                    type="button"
+                    onClick={() => onDeleteExpense(expense.id)}
+                    className="inline-flex items-center gap-1 rounded-lg bg-red-50 px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
+                  >
+                    <span aria-hidden="true">🗑</span>
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

@@ -10,10 +10,17 @@ function ExpensesProvider({ children }) {
     setExpenses((currentExpenses) => [expense, ...currentExpenses])
   }
 
+  function removeExpense(expenseId) {
+    setExpenses((currentExpenses) =>
+      currentExpenses.filter((expense) => expense.id !== expenseId),
+    )
+  }
+
   const value = useMemo(
     () => ({
       expenses,
       addExpense,
+      removeExpense,
     }),
     [expenses],
   )
