@@ -5,7 +5,6 @@ import ReceiptUploader from '../components/upload-receipt/ReceiptUploader'
 import { useExpenses } from '../context/ExpensesContext'
 
 const API_URL = import.meta.env.VITE_API_URL
-console.log(API_URL)
 
 const EMPTY_FORM = {
   merchant: '',
@@ -182,8 +181,8 @@ function UploadReceipt() {
             Upload Receipt
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
-            Drop in a receipt and review the mocked extraction before saving it
-            as an expense.
+            Drop in a receipt and review extracted details before saving it as
+            an expense.
           </p>
         </div>
 

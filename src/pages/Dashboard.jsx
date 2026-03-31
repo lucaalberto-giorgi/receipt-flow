@@ -1,5 +1,6 @@
 import DashboardRecentExpenses from '../components/dashboard/DashboardRecentExpenses'
 import DashboardSummaryCard from '../components/dashboard/DashboardSummaryCard'
+import EmptyStateCard from '../components/EmptyStateCard'
 import { useExpenses } from '../context/ExpensesContext'
 
 function parseAmount(amount) {
@@ -40,6 +41,7 @@ function Dashboard() {
   const topCategoryName = topCategoryEntry?.[0] ?? 'No category yet'
   const topCategoryCount = topCategoryEntry?.[1] ?? 0
   const recentExpenses = expenses.slice(0, 4)
+  const hasExpenses = expenses.length > 0
 
   return (
     <section className="space-y-6">
@@ -94,30 +96,45 @@ function Dashboard() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
             Top Category
           </p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-            {topCategoryName}
-          </h3>
-          <p className="mt-3 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
-            The most common expense category in the current shared state,
-            updating automatically as new receipts are saved.
-          </p>
+          {hasExpenses ? (
+            <>
+              <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                {topCategoryName}
+              </h3>
+              <p className="mt-3 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
+                The most common expense category in the current shared state,
+                updating automatically as new receipts are saved.
+              </p>
 
-          <div className="mt-6 rounded-[24px] border border-violet-100 bg-violet-50/70 p-5 dark:border-slate-700 dark:bg-slate-800">
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  Expense count
-                </p>
-                <p className="mt-2 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-                  {topCategoryCount}
-                </p>
+              <div className="mt-6 rounded-[24px] border border-violet-100 bg-violet-50/70 p-5 dark:border-slate-700 dark:bg-slate-800">
+                <div className="flex items-end justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      Expense count
+                    </p>
+                    <p className="mt-2 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                      {topCategoryCount}
+                    </p>
+                  </div>
+
+                  <span className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-violet-700 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300">
+                    Leading category
+                  </span>
+                </div>
               </div>
-
-              <span className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-violet-700 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300">
-                Leading category
-              </span>
+            </>
+          ) : (
+            <div className="mt-5">
+              <EmptyStateCard
+                eyebrow="Analytics"
+                title="No analytics available yet"
+                description="Add your first expense and this section will surface your top category automatically."
+                actionLabel="Upload Receipt"
+                actionTo="/upload-receipt"
+                padded={false}
+              />
             </div>
-          </div>
+          )}
         </section>
 
         <DashboardRecentExpenses expenses={recentExpenses} />

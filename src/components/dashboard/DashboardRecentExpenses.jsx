@@ -1,3 +1,5 @@
+import EmptyStateCard from '../EmptyStateCard'
+
 function StatusBadge({ status }) {
   const styles =
     status === 'Reviewed'
@@ -58,14 +60,13 @@ function DashboardRecentExpenses({ expenses }) {
         ))}
 
         {expenses.length === 0 && (
-          <div className="rounded-[24px] border border-dashed border-violet-200 bg-violet-50/60 px-6 py-12 text-center dark:border-slate-700 dark:bg-slate-800">
-            <p className="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-              No expenses yet
-            </p>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              Save a receipt from the upload page to populate the dashboard.
-            </p>
-          </div>
+          <EmptyStateCard
+            eyebrow="Latest Activity"
+            title="No expenses yet"
+            description="Upload a receipt to get started and your recent activity will appear here."
+            actionLabel="Upload Receipt"
+            actionTo="/upload-receipt"
+          />
         )}
       </div>
     </section>

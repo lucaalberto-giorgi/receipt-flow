@@ -66,10 +66,13 @@ function ReceiptUploader({
         />
 
         {!selectedFile && (
-          <div className="flex min-h-[440px] flex-col items-center justify-center rounded-[24px] bg-transparent px-6 text-center">
+          <div className="flex min-h-[440px] flex-col items-center justify-center rounded-[24px] border border-white/70 bg-white/55 px-6 text-center dark:border-slate-700 dark:bg-slate-900/40">
             <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-violet-600 text-lg font-semibold text-white shadow-[0_18px_32px_-20px_rgba(124,58,237,0.85)]">
               +
             </div>
+            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.28em] text-violet-500">
+              Receipt Upload
+            </p>
             <h4 className="mt-6 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
               Drag and drop your receipt
             </h4>

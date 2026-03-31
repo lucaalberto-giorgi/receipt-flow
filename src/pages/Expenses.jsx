@@ -213,6 +213,7 @@ function Expenses() {
 
         <ExpensesTable
           expenses={filteredExpenses}
+          hasExpenses={expenses.length > 0}
           onDeleteExpense={handleDeleteExpense}
         />
       </section>

@@ -25,7 +25,7 @@ function ExtractedExpenseForm({
             Extracted Expense
           </h3>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Review and adjust the mocked receipt fields before saving.
+            Review and adjust the expense details before saving.
           </p>
         </div>
 

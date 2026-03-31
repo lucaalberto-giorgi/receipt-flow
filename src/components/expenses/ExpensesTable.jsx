@@ -1,3 +1,5 @@
+import EmptyStateCard from '../EmptyStateCard'
+
 function StatusBadge({ status }) {
   const styles =
     status === 'Reviewed'
@@ -13,7 +15,7 @@ function StatusBadge({ status }) {
   )
 }
 
-function ExpensesTable({ expenses, onDeleteExpense }) {
+function ExpensesTable({ expenses, hasExpenses, onDeleteExpense }) {
   return (
     <section className="overflow-hidden rounded-[28px] border border-violet-100/80 bg-white shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900">
       <div className="flex items-center justify-between border-b border-violet-100/80 px-5 py-4 dark:border-slate-700 sm:px-6">
@@ -93,13 +95,18 @@ function ExpensesTable({ expenses, onDeleteExpense }) {
         </table>
 
         {expenses.length === 0 && (
-          <div className="px-6 py-16 text-center">
-            <p className="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-              No expenses found.
-            </p>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              Try a different search term or clear the category filter.
-            </p>
+          <div className="px-6 py-8">
+            <EmptyStateCard
+              eyebrow={hasExpenses ? 'No Results' : 'Getting Started'}
+              title={hasExpenses ? 'No matching expenses' : 'No expenses yet'}
+              description={
+                hasExpenses
+                  ? 'Try a different search term or clear the category filter.'
+                  : 'Upload a receipt or add an expense manually to get started.'
+              }
+              actionLabel={hasExpenses ? undefined : 'Upload Receipt'}
+              actionTo={hasExpenses ? undefined : '/upload-receipt'}
+            />
           </div>
         )}
       </div>

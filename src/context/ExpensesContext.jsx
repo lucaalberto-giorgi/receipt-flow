@@ -1,10 +1,9 @@
 import { createContext, useContext, useMemo, useState } from 'react'
-import { mockExpenses } from '../data/mockExpenses'
 
 const ExpensesContext = createContext(null)
 
 function ExpensesProvider({ children }) {
-  const [expenses, setExpenses] = useState(() => mockExpenses)
+  const [expenses, setExpenses] = useState([])
 
   function addExpense(expense) {
     setExpenses((currentExpenses) => [expense, ...currentExpenses])
