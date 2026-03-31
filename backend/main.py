@@ -3,10 +3,24 @@ from io import BytesIO
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
+print("RUNNING UPDATED MAIN.PY")
+
+try:
+    from pdf2image import convert_from_bytes
+except ImportError:
+    convert_from_bytes = None
+
 try:
     from pypdf import PdfReader
-except ImportError:
+    print("PYPDF IMPORT OK")
+except Exception as exc:
     PdfReader = None
+    print({"pypdf_import_error": str(exc)})
+
+try:
+    import pytesseract
+except ImportError:
+    pytesseract = None
 
 app = FastAPI()
 
@@ -32,6 +46,8 @@ def read_root():
 
 @app.post("/extract-receipt")
 async def extract_receipt(file: UploadFile | None = File(None)):
+    print("ENTERED EXTRACT RECEIPT ENDPOINT")
+
     if file is None or not file.filename:
         raise HTTPException(status_code=400, detail="No file uploaded.")
 
@@ -56,25 +72,92 @@ async def extract_receipt(file: UploadFile | None = File(None)):
     if not file_bytes:
         raise HTTPException(status_code=400, detail="Uploaded file is empty.")
 
-    if filename.endswith(".pdf") or content_type == "application/pdf":
+    print(
+        {
+            "filename": file.filename,
+            "content_type": content_type,
+            "file_size_bytes": len(file_bytes),
+        }
+    )
+
+    if filename.endswith(".pdf"):
+        print("ENTERED PDF BLOCK")
         extracted_text = ""
 
+        print({"PdfReader_is_none": PdfReader is None, "PdfReader": str(PdfReader)})
         if PdfReader is not None:
+            print("ABOUT TO CREATE PDF READER")
             try:
                 reader = PdfReader(BytesIO(file_bytes))
+            except Exception as exc:
+                print({"reader_error": str(exc)})
+                reader = None
+
+            if reader is not None:
+                print({"pdf_page_count": len(reader.pages)})
+
+                page_texts = []
+                for index, page in enumerate(reader.pages, start=1):
+                    page_text = (page.extract_text() or "").strip()
+
+                    if page_text:
+                        print({"page": index, "text": page_text})
+                    else:
+                        print({"page": index, "text": "[EMPTY PAGE TEXT]"})
+
+                    page_texts.append(page_text)
+
                 extracted_text = "\n".join(
-                    page.extract_text() or "" for page in reader.pages
+                    text for text in page_texts if text
                 ).strip()
-            except Exception:
-                extracted_text = ""
     else:
         extracted_text = "TODO: Add OCR for image uploads."
 
+    import re
+
+    merchant = "Tesco"
+    lines = [line.strip() for line in extracted_text.splitlines() if line.strip()]
+    if lines:
+        first_line = lines[0]
+        merchant_candidate = re.split(
+            r"\bdate\b\s*:|\btotal\b|\bamount\b|\bbalance due\b",
+            first_line,
+            maxsplit=1,
+            flags=re.IGNORECASE,
+        )[0].strip(" -:")
+        if merchant_candidate:
+            merchant = merchant_candidate
+    else:
+        merchant_match = re.search(
+            r"^\s*([A-Za-z][A-Za-z\s&'-]{2,})",
+            extracted_text,
+        )
+        if merchant_match:
+            merchant = merchant_match.group(1).strip()
+
+    date = "2026-03-31"
+    date_match = re.search(r"\b(\d{2}/\d{2}/\d{4}|\d{4}-\d{2}-\d{2})\b", extracted_text)
+    if date_match:
+        parsed_date = date_match.group(1)
+        if "/" in parsed_date:
+            day, month, year = parsed_date.split("/")
+            date = f"{year}-{month}-{day}"
+        else:
+            date = parsed_date
+
+    total = 24.99
+    total_match = re.search(
+        r"(?i)\b(?:total|amount|balance due)\b[^\d]*(\d+[.,]\d{2})",
+        extracted_text,
+    )
+    if total_match:
+        total = float(total_match.group(1).replace(",", "."))
+
     return {
         "filename": file.filename,
-        "merchant": "Tesco",
-        "date": "2026-03-31",
-        "total": 24.99,
+        "merchant": merchant,
+        "date": date,
+        "total": total,
         "currency": "GBP",
         "raw_text_preview": extracted_text[:200],
         "items": [
