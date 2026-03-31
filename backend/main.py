@@ -49,9 +49,9 @@ client = (
     else None
 )
 
-ALLOWED_ORIGINS = [
+allow_origins = [
     "http://localhost:5173",
-    "https://your-frontend-domain.vercel.app",
+    "https://receipt-flow.vercel.app",
 ]
 
 
@@ -144,7 +144,8 @@ def extract_with_ai(extracted_text: str) -> dict | None:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=allow_origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
