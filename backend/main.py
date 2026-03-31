@@ -1,5 +1,12 @@
+from io import BytesIO
+
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+
+try:
+    from pypdf import PdfReader
+except ImportError:
+    PdfReader = None
 
 app = FastAPI()
 
@@ -49,12 +56,27 @@ async def extract_receipt(file: UploadFile | None = File(None)):
     if not file_bytes:
         raise HTTPException(status_code=400, detail="Uploaded file is empty.")
 
+    if filename.endswith(".pdf") or content_type == "application/pdf":
+        extracted_text = ""
+
+        if PdfReader is not None:
+            try:
+                reader = PdfReader(BytesIO(file_bytes))
+                extracted_text = "\n".join(
+                    page.extract_text() or "" for page in reader.pages
+                ).strip()
+            except Exception:
+                extracted_text = ""
+    else:
+        extracted_text = "TODO: Add OCR for image uploads."
+
     return {
         "filename": file.filename,
         "merchant": "Tesco",
         "date": "2026-03-31",
         "total": 24.99,
         "currency": "GBP",
+        "raw_text_preview": extracted_text[:200],
         "items": [
             {"name": "Milk", "price": 1.50},
             {"name": "Bread", "price": 1.20},
