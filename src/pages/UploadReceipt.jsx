@@ -191,7 +191,7 @@ function UploadReceipt() {
           {isUploading
             ? 'Uploading receipt...'
             : selectedFile
-              ? 'Mock extraction ready'
+              ? 'Receipt parsed'
               : 'Waiting for upload'}
         </div>
       </div>
