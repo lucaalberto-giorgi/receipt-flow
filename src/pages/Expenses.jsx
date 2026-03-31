@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ExpensesFilters from '../components/expenses/ExpensesFilters'
 import ExpensesTable from '../components/expenses/ExpensesTable'
+import Skeleton from '../components/Skeleton'
 import { useExpenses } from '../context/ExpensesContext'
 import exportExpensesCsv from '../utils/exportExpensesCsv'
 
@@ -16,7 +17,7 @@ function formatCurrency(amount) {
 }
 
 function Expenses() {
-  const { expenses, removeExpense } = useExpenses()
+  const { expenses, removeExpense, isLoading } = useExpenses()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All categories')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -99,6 +100,7 @@ function Expenses() {
             <button
               type="button"
               onClick={handleExportCsv}
+              disabled={isLoading}
               className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
             >
               Export CSV
@@ -111,50 +113,66 @@ function Expenses() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-              Summary
-            </p>
-            <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-              Total Spend
-            </h3>
-            <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-              {formatCurrency(totalSpend)}
-            </p>
-            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-              Across all saved expenses
-            </p>
-          </article>
+          {isLoading
+            ? Array.from({ length: 3 }, (_, index) => (
+                <article
+                  key={index}
+                  className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6"
+                >
+                  <Skeleton className="h-3 w-16" rounded="rounded-full" />
+                  <Skeleton className="mt-3 h-4 w-28" />
+                  <Skeleton className="mt-6 h-10 w-24" />
+                  <Skeleton className="mt-4 h-4 w-40" />
+                </article>
+              ))
+            : (
+              <>
+                <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
+                    Summary
+                  </p>
+                  <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Total Spend
+                  </h3>
+                  <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                    {formatCurrency(totalSpend)}
+                  </p>
+                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                    Across all saved expenses
+                  </p>
+                </article>
 
-          <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-              Volume
-            </p>
-            <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-              Total Expenses
-            </h3>
-            <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-              {expenses.length}
-            </p>
-            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-              Items currently in shared state
-            </p>
-          </article>
+                <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
+                    Volume
+                  </p>
+                  <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Total Expenses
+                  </h3>
+                  <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                    {expenses.length}
+                  </p>
+                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                    Items currently in shared state
+                  </p>
+                </article>
 
-          <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-              Leader
-            </p>
-            <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-              Top Category
-            </h3>
-            <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-              {topCategory}
-            </p>
-            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-              Highest spend category right now
-            </p>
-          </article>
+                <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
+                    Leader
+                  </p>
+                  <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Top Category
+                  </h3>
+                  <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                    {topCategory}
+                  </p>
+                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                    Highest spend category right now
+                  </p>
+                </article>
+              </>
+            )}
         </div>
 
         <section className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
@@ -169,7 +187,22 @@ function Expenses() {
             </div>
           </div>
 
-          {categoryBreakdown.length === 0 ? (
+          {isLoading ? (
+            <div className="mt-4 space-y-4 px-1">
+              {Array.from({ length: 4 }, (_, index) => (
+                <div
+                  key={index}
+                  className="rounded-xl border border-violet-100/80 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/50"
+                >
+                  <div className="flex items-baseline justify-between gap-4">
+                    <Skeleton className="h-4 w-28" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                  <Skeleton className="mt-3 h-1.5 w-full" rounded="rounded-full" />
+                </div>
+              ))}
+            </div>
+          ) : categoryBreakdown.length === 0 ? (
             <p className="py-8 text-sm text-slate-500 dark:text-slate-400">
               No expense data yet.
             </p>
@@ -212,6 +245,7 @@ function Expenses() {
         />
 
         <ExpensesTable
+          isLoading={isLoading}
           expenses={filteredExpenses}
           hasExpenses={expenses.length > 0}
           onDeleteExpense={handleDeleteExpense}

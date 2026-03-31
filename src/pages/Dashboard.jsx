@@ -1,6 +1,7 @@
 import DashboardRecentExpenses from '../components/dashboard/DashboardRecentExpenses'
 import DashboardSummaryCard from '../components/dashboard/DashboardSummaryCard'
 import EmptyStateCard from '../components/EmptyStateCard'
+import Skeleton from '../components/Skeleton'
 import { useExpenses } from '../context/ExpensesContext'
 
 function parseAmount(amount) {
@@ -15,7 +16,7 @@ function formatCurrency(amount) {
 }
 
 function Dashboard() {
-  const { expenses } = useExpenses()
+  const { expenses, isLoading } = useExpenses()
 
   const totalExpenses = expenses.length
   const totalAmount = expenses.reduce(
@@ -65,30 +66,51 @@ function Dashboard() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <DashboardSummaryCard
-          accent="violet"
-          eyebrow="Records"
-          title="Total Expenses"
-          value={String(totalExpenses)}
-        />
-        <DashboardSummaryCard
-          accent="indigo"
-          eyebrow="Value"
-          title="Total Amount"
-          value={formatCurrency(totalAmount)}
-        />
-        <DashboardSummaryCard
-          accent="emerald"
-          eyebrow="Checked"
-          title="Reviewed Expenses"
-          value={String(reviewedExpenses)}
-        />
-        <DashboardSummaryCard
-          accent="amber"
-          eyebrow="Queue"
-          title="Pending Expenses"
-          value={String(pendingExpenses)}
-        />
+        {isLoading ? (
+          Array.from({ length: 4 }, (_, index) => (
+            <article
+              key={index}
+              className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-3">
+                  <Skeleton className="h-3 w-16" rounded="rounded-full" />
+                  <Skeleton className="h-4 w-28" />
+                </div>
+                <Skeleton className="h-12 w-12" rounded="rounded-2xl" />
+              </div>
+              <Skeleton className="mt-8 h-10 w-24" />
+              <Skeleton className="mt-5 h-7 w-20" rounded="rounded-full" />
+            </article>
+          ))
+        ) : (
+          <>
+            <DashboardSummaryCard
+              accent="violet"
+              eyebrow="Records"
+              title="Total Expenses"
+              value={String(totalExpenses)}
+            />
+            <DashboardSummaryCard
+              accent="indigo"
+              eyebrow="Value"
+              title="Total Amount"
+              value={formatCurrency(totalAmount)}
+            />
+            <DashboardSummaryCard
+              accent="emerald"
+              eyebrow="Checked"
+              title="Reviewed Expenses"
+              value={String(reviewedExpenses)}
+            />
+            <DashboardSummaryCard
+              accent="amber"
+              eyebrow="Queue"
+              title="Pending Expenses"
+              value={String(pendingExpenses)}
+            />
+          </>
+        )}
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
@@ -96,7 +118,24 @@ function Dashboard() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
             Top Category
           </p>
-          {hasExpenses ? (
+          {isLoading ? (
+            <div className="mt-5 space-y-4">
+              <Skeleton className="h-8 w-52" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-full max-w-md" />
+                <Skeleton className="h-4 w-4/5 max-w-sm" />
+              </div>
+              <div className="mt-6 rounded-[24px] border border-violet-100 bg-violet-50/70 p-5 dark:border-slate-700 dark:bg-slate-800">
+                <div className="flex items-end justify-between gap-4">
+                  <div className="space-y-3">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-10 w-16" />
+                  </div>
+                  <Skeleton className="h-7 w-28" rounded="rounded-full" />
+                </div>
+              </div>
+            </div>
+          ) : hasExpenses ? (
             <>
               <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
                 {topCategoryName}
@@ -137,7 +176,7 @@ function Dashboard() {
           )}
         </section>
 
-        <DashboardRecentExpenses expenses={recentExpenses} />
+        <DashboardRecentExpenses expenses={recentExpenses} isLoading={isLoading} />
       </div>
     </section>
   )

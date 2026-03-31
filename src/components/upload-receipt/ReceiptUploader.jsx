@@ -13,6 +13,7 @@ function formatFileSize(sizeInBytes) {
 function ReceiptUploader({
   inputRef,
   isDragOver,
+  isUploading,
   onBrowseClick,
   onDragLeave,
   onDragOver,
@@ -40,10 +41,19 @@ function ReceiptUploader({
 
         <button
           type="button"
+          disabled={isUploading}
           onClick={onBrowseClick}
-          className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-violet-700 transition hover:border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+          className={`inline-flex items-center justify-center rounded-2xl border px-4 py-2 text-sm font-medium transition ${
+            isUploading
+              ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500'
+              : 'border-slate-200 bg-slate-50 text-violet-700 hover:border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300 dark:hover:border-slate-600 dark:hover:bg-slate-800'
+          }`}
         >
-          {selectedFile ? 'Replace file' : 'Choose file'}
+          {isUploading
+            ? 'Extracting...'
+            : selectedFile
+              ? 'Replace file'
+              : 'Choose file'}
         </button>
       </div>
 
@@ -55,7 +65,7 @@ function ReceiptUploader({
           isDragOver
             ? 'border-slate-400 bg-slate-50 dark:border-slate-500 dark:bg-slate-800'
             : 'border-slate-300 bg-slate-50 hover:border-slate-400 dark:border-slate-600 dark:bg-slate-800 hover:dark:border-slate-500'
-        }`}
+        } ${isUploading ? 'pointer-events-none opacity-75' : ''}`}
       >
         <input
           ref={inputRef}
@@ -95,7 +105,7 @@ function ReceiptUploader({
 
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-[24px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
               <span className="font-medium text-slate-900 dark:text-slate-100">{selectedFile.name}</span>
-              <span>{formatFileSize(selectedFile.size)}</span>
+              <span>{isUploading ? 'Extracting receipt...' : formatFileSize(selectedFile.size)}</span>
             </div>
           </div>
         )}
