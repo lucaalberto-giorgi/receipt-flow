@@ -116,24 +116,16 @@ async def extract_receipt(file: UploadFile | None = File(None)):
     import re
 
     merchant = "Tesco"
-    lines = [line.strip() for line in extracted_text.splitlines() if line.strip()]
-    if lines:
-        first_line = lines[0]
-        merchant_candidate = re.split(
-            r"\bdate\b\s*:|\btotal\b|\bamount\b|\bbalance due\b",
-            first_line,
-            maxsplit=1,
-            flags=re.IGNORECASE,
-        )[0].strip(" -:")
+    merchant_source = " ".join(extracted_text.split())
+    merchant_match = re.match(
+        r"^\s*([A-Za-z][A-Za-z\s&'-]*?)(?=\s+\d|\s+(?:street|road|avenue|london|date)\b|$)",
+        merchant_source,
+        flags=re.IGNORECASE,
+    )
+    if merchant_match:
+        merchant_candidate = merchant_match.group(1).strip(" -:")
         if merchant_candidate:
             merchant = merchant_candidate
-    else:
-        merchant_match = re.search(
-            r"^\s*([A-Za-z][A-Za-z\s&'-]{2,})",
-            extracted_text,
-        )
-        if merchant_match:
-            merchant = merchant_match.group(1).strip()
 
     date = "2026-03-31"
     date_match = re.search(r"\b(\d{2}/\d{2}/\d{4}|\d{4}-\d{2}-\d{2})\b", extracted_text)
