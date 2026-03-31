@@ -43,7 +43,16 @@ ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".pdf"}
 EXPENSE_CATEGORIES = {"Food", "Travel", "Shopping", "Utilities", "Entertainment", "Other"}
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-client = OpenAI() if OpenAI is not None and OPENAI_API_KEY else None
+client = (
+    OpenAI(api_key=OPENAI_API_KEY)
+    if OpenAI is not None and OPENAI_API_KEY
+    else None
+)
+
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://your-frontend-domain.vercel.app",
+]
 
 
 AI_RECEIPT_PROMPT = """Extract receipt data from the provided text and return JSON.
@@ -135,7 +144,7 @@ def extract_with_ai(extracted_text: str) -> dict | None:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
