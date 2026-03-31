@@ -1,3 +1,10 @@
+import json
+import os
+import re
+
+from dotenv import load_dotenv
+
+load_dotenv()
 from io import BytesIO
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -14,6 +21,11 @@ except Exception:
     PdfReader = None
 
 try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
+
+try:
     import pytesseract
 except ImportError:
     pytesseract = None
@@ -28,6 +40,90 @@ ALLOWED_CONTENT_TYPES = {
 }
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".pdf"}
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+client = OpenAI() if OpenAI is not None and OPENAI_API_KEY else None
+
+
+AI_RECEIPT_PROMPT = """Extract receipt data from the provided text and return JSON.
+
+Return only valid JSON in this shape:
+{
+  "merchant": "string",
+  "date": "YYYY-MM-DD",
+  "total": 0.0,
+  "items": [{"name": "string", "price": 0.0}]
+}
+
+Use the text as the source of truth. Do not include extra fields.
+"""
+
+
+def extract_with_ai(extracted_text: str) -> dict | None:
+    if client is None or not extracted_text.strip():
+        return None
+
+    try:
+        response = client.responses.create(
+            model=OPENAI_MODEL,
+            input=[
+                {"role": "system", "content": AI_RECEIPT_PROMPT},
+                {"role": "user", "content": f"Receipt text:\n{extracted_text}"},
+            ],
+        )
+        response_text = response.output_text.strip()
+        if response_text.startswith("```"):
+            response_text = re.sub(r"^```(?:json)?\s*", "", response_text)
+            response_text = re.sub(r"\s*```$", "", response_text)
+        parsed = json.loads(response_text)
+    except Exception:
+        return None
+
+    if not isinstance(parsed, dict):
+        return None
+
+    merchant = parsed.get("merchant")
+    date = parsed.get("date")
+    total = parsed.get("total")
+    items = parsed.get("items")
+
+    if not isinstance(merchant, str) or not merchant.strip():
+        return None
+
+    if not isinstance(date, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        return None
+
+    try:
+        total = float(total)
+    except (TypeError, ValueError):
+        return None
+
+    if not isinstance(items, list):
+        return None
+
+    normalized_items = []
+    for item in items:
+        if not isinstance(item, dict):
+            return None
+
+        name = item.get("name")
+        price = item.get("price")
+        if not isinstance(name, str) or not name.strip():
+            return None
+
+        try:
+            price = float(price)
+        except (TypeError, ValueError):
+            return None
+
+        normalized_items.append({"name": name.strip(), "price": price})
+
+    return {
+        "merchant": merchant.strip(),
+        "date": date,
+        "total": total,
+        "items": normalized_items,
+    }
 
 app.add_middleware(
     CORSMiddleware,
@@ -87,8 +183,6 @@ async def extract_receipt(file: UploadFile | None = File(None)):
     else:
         extracted_text = "TODO: Add OCR for image uploads."
 
-    import re
-
     merchant = "Tesco"
     merchant_source = " ".join(extracted_text.split())
     merchant_match = re.match(
@@ -146,6 +240,13 @@ async def extract_receipt(file: UploadFile | None = File(None)):
 
     if not items:
         items = fallback_items
+
+    ai_receipt = extract_with_ai(extracted_text)
+    if ai_receipt is not None:
+        merchant = ai_receipt["merchant"]
+        date = ai_receipt["date"]
+        total = ai_receipt["total"]
+        items = ai_receipt["items"] or items
 
     return {
         "filename": file.filename,

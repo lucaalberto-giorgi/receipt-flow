@@ -1,4 +1,6 @@
+python-dotenv
 pypdf
 pdf2image
 pillow
 pytesseract
+openai
