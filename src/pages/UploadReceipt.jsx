@@ -4,20 +4,14 @@ import ExtractedExpenseForm from '../components/upload-receipt/ExtractedExpenseF
 import ReceiptUploader from '../components/upload-receipt/ReceiptUploader'
 import { useExpenses } from '../context/ExpensesContext'
 
+const API_URL = import.meta.env.VITE_API_URL
+
 const EMPTY_FORM = {
   merchant: '',
   amount: '',
   date: '',
   category: '',
   notes: '',
-}
-
-const SAMPLE_RECEIPT_DATA = {
-  merchant: 'Northwind Coffee Roasters',
-  amount: '24.80',
-  date: '2026-03-29',
-  category: 'Meals',
-  notes: 'Mock extracted from uploaded receipt.',
 }
 
 function UploadReceipt() {
@@ -82,20 +76,39 @@ function UploadReceipt() {
     }
   }
 
-  function applyMockExtraction(file) {
+  async function applyMockExtraction(file) {
+    console.log('applyMockExtraction called', file)
     setSelectedFile(file)
-    setFormData({
-      ...SAMPLE_RECEIPT_DATA,
-      notes: `Mock extracted from ${file.name}.`,
+
+    const requestBody = new FormData()
+    requestBody.append('file', file)
+
+    const response = await fetch(`${API_URL}/extract-receipt`, {
+      method: 'POST',
+      body: requestBody,
     })
+
+    const extractedReceipt = await response.json()
+    console.log('extract response:', extractedReceipt)
+
+    setFormData((currentData) => ({
+      ...currentData,
+      merchant: extractedReceipt.merchant ?? '',
+      amount:
+        extractedReceipt.total != null ? String(extractedReceipt.total) : '',
+      date: extractedReceipt.date ?? '',
+      category: currentData.category || 'Meals',
+      notes:
+        extractedReceipt.items?.map((item) => item.name).join(', ') ?? '',
+    }))
   }
 
-  function handleFileSelect(file) {
+  async function handleFileSelect(file) {
     if (!file) {
       return
     }
 
-    applyMockExtraction(file)
+    await applyMockExtraction(file)
   }
 
   function handleInputChange(event) {
