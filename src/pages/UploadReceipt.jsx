@@ -185,13 +185,13 @@ function UploadReceipt() {
   }
 
   return (
-    <section className="space-y-6">
-      <div className="flex flex-col gap-3 border-b border-violet-100/80 pb-5 dark:border-slate-700 sm:flex-row sm:items-end sm:justify-between">
+    <section className="min-w-0 space-y-5 sm:space-y-6">
+      <div className="flex flex-col gap-2 border-b border-violet-100/80 pb-4 dark:border-slate-700 sm:gap-3 sm:pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
             Receipt Intake
           </p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
             Upload Receipt
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
@@ -200,7 +200,7 @@ function UploadReceipt() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+        <div className="rounded-xl border border-violet-100 bg-violet-50/80 px-3 py-2.5 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 sm:rounded-2xl sm:px-4 sm:py-3">
           {isUploading
             ? 'Extracting receipt...'
             : selectedFile
@@ -213,7 +213,7 @@ function UploadReceipt() {
         <p className="text-sm text-rose-600">{uploadError}</p>
       ) : null}
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)]">
+      <div className="grid min-w-0 gap-5 sm:gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)]">
         <ReceiptUploader
           inputRef={inputRef}
           isDragOver={isDragOver}

@@ -1,22 +1,22 @@
 import { NavLink } from 'react-router-dom'
 
-const navItems = [
-  { label: 'Dashboard', icon: 'D', to: '/' },
-  { label: 'Upload Receipt', icon: 'U', to: '/upload-receipt' },
-  { label: 'Expenses', icon: 'E', to: '/expenses' },
-  { label: 'Settings', icon: 'S', to: '/settings' },
+export const navItems = [
+  { label: 'Dashboard', mobileLabel: 'Dashboard', icon: 'D', to: '/' },
+  { label: 'Upload Receipt', mobileLabel: 'Upload', icon: 'U', to: '/upload-receipt' },
+  { label: 'Expenses', mobileLabel: 'Expenses', icon: 'E', to: '/expenses' },
+  { label: 'Settings', mobileLabel: 'Settings', icon: 'S', to: '/settings' },
 ]
 
 function Sidebar() {
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 w-24 p-4 md:w-72 md:p-5">
-      <div className="flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_24px_50px_-38px_rgba(15,23,42,0.18)] backdrop-blur dark:border-slate-700 dark:bg-slate-900 md:p-5">
-        <div className="mb-8 flex items-center gap-3 px-1">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600 dark:bg-slate-800 dark:text-violet-300">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-20 p-3 md:block md:w-72 md:p-5">
+      <div className="flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-3 shadow-[0_24px_50px_-38px_rgba(15,23,42,0.18)] backdrop-blur dark:border-slate-700 dark:bg-slate-900 md:p-5">
+        <div className="mb-6 flex items-center gap-2.5 px-0.5 md:mb-8 md:gap-3 md:px-1">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 text-violet-600 dark:bg-slate-800 dark:text-violet-300 md:h-10 md:w-10">
             <svg
               viewBox="0 0 24 24"
               aria-hidden="true"
-              className="h-5 w-5"
+              className="h-[18px] w-[18px] md:h-5 md:w-5"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.9"
@@ -47,7 +47,7 @@ function Sidebar() {
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `flex items-center justify-center gap-3 rounded-2xl px-3 py-3 text-left transition md:justify-start ${
+                `flex items-center justify-center gap-3 rounded-2xl px-2.5 py-2.5 text-left transition md:justify-start md:px-3 md:py-3 ${
                   isActive
                     ? 'bg-violet-600 text-white shadow-[0_18px_32px_-20px_rgba(124,58,237,0.9)]'
                     : 'text-slate-600 hover:bg-slate-50 hover:text-violet-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-violet-300'
@@ -57,7 +57,7 @@ function Sidebar() {
               {({ isActive }) => (
                 <>
                   <span
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl border text-sm font-semibold ${
+                    className={`flex h-9 w-9 items-center justify-center rounded-xl border text-sm font-semibold md:h-10 md:w-10 ${
                       isActive
                         ? 'border-white/25 bg-white/15 text-white'
                         : 'border-slate-200 bg-white text-violet-600 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300'

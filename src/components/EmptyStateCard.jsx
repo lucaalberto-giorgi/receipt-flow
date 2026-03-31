@@ -10,8 +10,8 @@ function EmptyStateCard({
 }) {
   return (
     <div
-      className={`rounded-[24px] border border-violet-100 bg-violet-50/70 text-center dark:border-slate-700 dark:bg-slate-800/80 ${
-        padded ? 'px-6 py-10 sm:px-8 sm:py-12' : 'px-5 py-8'
+      className={`rounded-2xl border border-violet-100 bg-violet-50/70 text-center dark:border-slate-700 dark:bg-slate-800/80 sm:rounded-[24px] ${
+        padded ? 'px-5 py-8 sm:px-8 sm:py-12' : 'px-4 py-6 sm:px-5 sm:py-8'
       }`}
     >
       <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-[0_16px_30px_-22px_rgba(76,29,149,0.35)] dark:bg-slate-900">

@@ -81,13 +81,13 @@ function Expenses() {
 
   return (
     <>
-      <section className="space-y-6">
-        <div className="flex flex-col gap-3 border-b border-violet-100/80 pb-5 dark:border-slate-700 sm:flex-row sm:items-end sm:justify-between">
+      <section className="min-w-0 space-y-5 sm:space-y-6">
+        <div className="flex flex-col gap-2 border-b border-violet-100/80 pb-4 dark:border-slate-700 sm:gap-3 sm:pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
               Expense Ledger
             </p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
               Expenses
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
@@ -96,28 +96,28 @@ function Expenses() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
             <button
               type="button"
               onClick={handleExportCsv}
               disabled={isLoading}
-              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
             >
               Export CSV
             </button>
 
-            <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+            <div className="rounded-xl border border-violet-100 bg-violet-50/80 px-3 py-2.5 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 sm:rounded-2xl sm:px-4 sm:py-3">
               {filteredExpenses.length} expense{filteredExpenses.length === 1 ? '' : 's'}
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {isLoading
             ? Array.from({ length: 3 }, (_, index) => (
                 <article
                   key={index}
-                  className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6"
+                  className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6"
                 >
                   <Skeleton className="h-3 w-16" rounded="rounded-full" />
                   <Skeleton className="mt-3 h-4 w-28" />
@@ -127,14 +127,14 @@ function Expenses() {
               ))
             : (
               <>
-                <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+                <article className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
                     Summary
                   </p>
                   <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
                     Total Spend
                   </h3>
-                  <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                  <p className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
                     {formatCurrency(totalSpend)}
                   </p>
                   <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
@@ -142,14 +142,14 @@ function Expenses() {
                   </p>
                 </article>
 
-                <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+                <article className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
                     Volume
                   </p>
                   <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
                     Total Expenses
                   </h3>
-                  <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                  <p className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
                     {expenses.length}
                   </p>
                   <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
@@ -157,14 +157,14 @@ function Expenses() {
                   </p>
                 </article>
 
-                <article className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+                <article className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
                     Leader
                   </p>
                   <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
                     Top Category
                   </h3>
-                  <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                  <p className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
                     {topCategory}
                   </p>
                   <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
@@ -175,24 +175,24 @@ function Expenses() {
             )}
         </div>
 
-        <section className="rounded-[28px] border border-violet-100/80 bg-white p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:p-6">
-          <div className="flex items-center justify-between gap-4 border-b border-violet-100/80 pb-4 dark:border-slate-700">
+        <section className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
+          <div className="flex flex-col gap-2 border-b border-violet-100/80 pb-3 dark:border-slate-700 sm:gap-3 sm:pb-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
                 Breakdown
               </p>
-              <h3 className="mt-2 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+              <h3 className="mt-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-xl">
                 Spending by Category
               </h3>
             </div>
           </div>
 
           {isLoading ? (
-            <div className="mt-4 space-y-4 px-1">
+            <div className="mt-3 space-y-3 px-0.5 sm:mt-4 sm:space-y-4 sm:px-1">
               {Array.from({ length: 4 }, (_, index) => (
                 <div
                   key={index}
-                  className="rounded-xl border border-violet-100/80 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/50"
+                  className="rounded-xl border border-violet-100/80 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-800/50 sm:px-4 sm:py-3"
                 >
                   <div className="flex items-baseline justify-between gap-4">
                     <Skeleton className="h-4 w-28" />
@@ -207,11 +207,11 @@ function Expenses() {
               No expense data yet.
             </p>
           ) : (
-            <div className="mt-4 space-y-4 px-1">
+            <div className="mt-3 space-y-3 px-0.5 sm:mt-4 sm:space-y-4 sm:px-1">
               {categoryBreakdown.map(([category, amount]) => (
                 <div
                   key={category}
-                  className="rounded-xl border border-violet-100/80 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/50"
+                  className="rounded-xl border border-violet-100/80 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-800/50 sm:px-4 sm:py-3"
                 >
                   <div className="flex items-baseline justify-between gap-4 text-sm">
                     <span className="font-medium text-slate-900 dark:text-slate-100">
