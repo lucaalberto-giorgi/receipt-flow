@@ -1,8 +1,12 @@
 import base64
 import json
+import logging
 import os
 import re
 from io import BytesIO
+
+logger = logging.getLogger("receipt-flow")
+logging.basicConfig(level=logging.INFO)
 
 try:
     from dotenv import load_dotenv
@@ -41,6 +45,14 @@ client = (
     OpenAI(api_key=OPENAI_API_KEY)
     if OpenAI is not None and OPENAI_API_KEY
     else None
+)
+
+logger.info(
+    "AI extraction configured: sdk=%s key_present=%s key_length=%d model=%s",
+    OpenAI is not None,
+    bool(OPENAI_API_KEY),
+    len(OPENAI_API_KEY or ""),
+    OPENAI_MODEL,
 )
 
 # In production the API is same-origin (/api/*); CORS is only needed for
@@ -89,6 +101,7 @@ def extract_with_ai(extracted_text: str) -> dict | None:
         response_text = strip_markdown_fences(response.output_text)
         parsed = json.loads(response_text)
     except Exception:
+        logger.exception("Structured extraction call failed")
         return None
 
     if not isinstance(parsed, dict):
@@ -192,6 +205,7 @@ def transcribe_image_with_ai(file_bytes: bytes, content_type: str | None, filena
         )
         return strip_markdown_fences(response.output_text)
     except Exception:
+        logger.exception("Image transcription call failed")
         return ""
 
 
