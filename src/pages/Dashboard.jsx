@@ -45,61 +45,58 @@ function Dashboard() {
   const hasExpenses = expenses.length > 0
 
   return (
-    <section className="min-w-0 space-y-6 sm:space-y-7">
-      <div className="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <section className="min-w-0 space-y-5 sm:space-y-6">
+      <div className="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="eyebrow">Expense Overview</p>
-          <h2 className="font-display mt-3 text-3xl uppercase tracking-tight text-ink sm:text-4xl">
+          <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[28px]">
             Dashboard
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-ink-soft">
+          <p className="mt-1 max-w-2xl text-sm text-ink-soft">
             Monitor receipts flowing into the ledger and keep an eye on the
             latest review activity.
           </p>
         </div>
 
-        <div className="flex flex-col items-start gap-2 sm:items-end">
-          <span className="copy-tag bg-card">Copy 1 · Original</span>
-          <p className="figure text-xs font-bold tracking-[0.06em] text-ink-soft">
-            {totalExpenses} ENTRIES ON FILE
-          </p>
+        <div className="flex flex-col items-start gap-1 sm:items-end">
+          <span className="copy-meta">Copy 1 · Original</span>
+          <span className="copy-meta">{totalExpenses} entries on file</span>
         </div>
       </div>
 
-      <div className="reveal reveal-1 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="reveal reveal-1 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {isLoading ? (
           Array.from({ length: 4 }, (_, index) => (
-            <article key={index} className="card p-5 sm:p-6">
+            <article key={index} className="card p-5">
               <div className="flex items-baseline justify-between gap-4">
                 <Skeleton className="h-3 w-24" />
                 <Skeleton className="h-3 w-8" />
               </div>
-              <Skeleton className="mt-6 h-9 w-28" />
+              <Skeleton className="mt-5 h-8 w-28" />
               <Skeleton className="mt-5 h-3 w-32" />
             </article>
           ))
         ) : (
           <>
             <DashboardSummaryCard
-              index="NO. 01"
+              index="01"
               title="Total Expenses"
               value={String(totalExpenses)}
               caption="Entries on file"
             />
             <DashboardSummaryCard
-              index="NO. 02"
+              index="02"
               title="Total Amount"
               value={formatCurrency(totalAmount)}
               caption="Gross spend · USD"
             />
             <DashboardSummaryCard
-              index="NO. 03"
+              index="03"
               title="Reviewed"
               value={String(reviewedExpenses)}
               caption="Stamped reviewed"
             />
             <DashboardSummaryCard
-              index="NO. 04"
+              index="04"
               title="Pending"
               value={String(pendingExpenses)}
               caption="Awaiting review"
@@ -108,59 +105,53 @@ function Dashboard() {
         )}
       </div>
 
-      <div className="reveal reveal-2 grid min-w-0 gap-5 sm:gap-6 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-        <section className="card p-0">
-          <div className="strip">
-            <span>Top Category</span>
-            <span className="font-mono text-[9px] font-bold tracking-[0.1em] opacity-70">
-              AUTO
-            </span>
-          </div>
-
-          <div className="p-5 sm:p-6">
-            {isLoading ? (
-              <div className="space-y-4">
-                <Skeleton className="h-8 w-52" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-full max-w-md" />
-                  <Skeleton className="h-4 w-4/5 max-w-sm" />
-                </div>
-                <div className="mt-6 border-2 border-dashed border-rule p-5">
-                  <div className="flex items-end justify-between gap-4">
-                    <div className="space-y-3">
-                      <Skeleton className="h-4 w-24" />
-                      <Skeleton className="h-10 w-16" />
-                    </div>
-                    <Skeleton className="h-7 w-28" />
+      <div className="reveal reveal-2 grid min-w-0 gap-4 sm:gap-5 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <section className="card p-5 sm:p-6">
+          <p className="eyebrow">Top category</p>
+          {isLoading ? (
+            <div className="mt-4 space-y-4">
+              <Skeleton className="h-7 w-40" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-full max-w-md" />
+                <Skeleton className="h-4 w-4/5 max-w-sm" />
+              </div>
+              <div className="mt-5 border border-rule bg-sunken/60 p-4">
+                <div className="flex items-end justify-between gap-4">
+                  <div className="space-y-3">
+                    <Skeleton className="h-3 w-24" />
+                    <Skeleton className="h-8 w-12" />
                   </div>
+                  <Skeleton className="h-5 w-28" />
                 </div>
               </div>
-            ) : hasExpenses ? (
-              <>
-                <h3 className="font-display text-2xl uppercase tracking-tight text-ink">
-                  {topCategoryName}
-                </h3>
-                <p className="mt-3 max-w-md text-sm leading-6 text-ink-soft">
-                  The most frequent expense category across the current ledger,
-                  updating automatically as new receipts are posted.
-                </p>
+            </div>
+          ) : hasExpenses ? (
+            <>
+              <h3 className="mt-2 text-xl font-bold tracking-tight text-ink">
+                {topCategoryName}
+              </h3>
+              <p className="mt-2 max-w-md text-sm leading-6 text-ink-soft">
+                The most frequent expense category across the current ledger,
+                updating automatically as new receipts are posted.
+              </p>
 
-                <div className="mt-6 border-2 border-dashed border-ink bg-carbon-yellow/60 p-5">
-                  <div className="flex items-end justify-between gap-4">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ink-soft">
-                        Expense count
-                      </p>
-                      <p className="figure mt-2 text-4xl font-bold tracking-tight text-ink">
-                        {topCategoryCount}
-                      </p>
-                    </div>
-
-                    <span className="stamp text-accent">Leading category</span>
+              <div className="mt-5 border border-rule bg-sunken/60 p-4">
+                <div className="flex items-end justify-between gap-4">
+                  <div>
+                    <p className="copy-meta">Expense count</p>
+                    <p className="figure mt-1.5 text-3xl font-bold tracking-tight text-ink">
+                      {topCategoryCount}
+                    </p>
                   </div>
+
+                  <span className="badge bg-accent-tint text-accent">
+                    Leading category
+                  </span>
                 </div>
-              </>
-            ) : (
+              </div>
+            </>
+          ) : (
+            <div className="mt-4">
               <EmptyStateCard
                 eyebrow="Analytics"
                 title="No analytics available yet"
@@ -169,8 +160,8 @@ function Dashboard() {
                 actionTo="/upload-receipt"
                 padded={false}
               />
-            )}
-          </div>
+            </div>
+          )}
         </section>
 
         <DashboardRecentExpenses expenses={recentExpenses} isLoading={isLoading} />

@@ -2,35 +2,36 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
-   Receipt Flow — "Carbon Copy" design system
-   The app is paperwork, so the UI is a 1970s office form: manila desk, white
-   form sheets with hard ink borders and offset-block shadows, black header
-   strips, typewritten figures, rubber stamps in ballpoint blue and stamp red.
-   Zero rounded corners. Dark mode is the carbon sheet itself.
+   Receipt Flow — "Carbon Copy" design system, productized.
+   The paperwork identity lives at the edges: manila surface, typewritten
+   figures, ballpoint-blue / stamp-red status inks, form numbers, a barcode.
+   The center is a calm working tool: sentence case, hairline borders,
+   whitespace hierarchy, one clear action per screen. Zero rounded corners.
+   Dark mode is the carbon sheet.
 --------------------------------------------------------------------------- */
 
 :root {
   color-scheme: light;
 
-  --paper: #e7dbb6; /* manila desk */
-  --card: #fcfaf1; /* the form sheet */
-  --sunken: #efe8d2;
+  --paper: #eae1c6; /* manila desk, softened */
+  --card: #fcfaf3; /* the form sheet */
+  --sunken: #f1ebd9;
   --ink: #17140d;
-  --ink-soft: rgba(23, 20, 13, 0.66);
+  --ink-soft: rgba(23, 20, 13, 0.64);
   --ink-faint: rgba(23, 20, 13, 0.42);
-  --rule: rgba(23, 20, 13, 0.3);
-  --rule-soft: rgba(23, 20, 13, 0.12);
+  --rule: rgba(23, 20, 13, 0.18);
+  --rule-soft: rgba(23, 20, 13, 0.09);
 
   --accent: #2452a8; /* ballpoint blue */
-  --accent-tint: #d6e2f2;
+  --accent-tint: #dde7f4;
   --red-ink: #c22f1a; /* stamp red */
-  --red-tint: #f6dad2;
+  --red-tint: #f6ddd5;
 
-  --carbon-yellow: #f2e296;
-  --carbon-pink: #f3cec4;
-  --carbon-blue: #cfe0f0;
+  --carbon-yellow: #f0e4ac;
+  --carbon-pink: #f4d6cd;
+  --carbon-blue: #d5e2f0;
 
-  --press: #17140d; /* hard offset shadow */
+  --press: #17140d;
 }
 
 .dark {
@@ -38,12 +39,12 @@
 
   --paper: #141120; /* carbon-paper purple-black */
   --card: #1d1930;
-  --sunken: #272141;
+  --sunken: #262141;
   --ink: #d9d3f0;
   --ink-soft: rgba(217, 211, 240, 0.66);
   --ink-faint: rgba(217, 211, 240, 0.42);
-  --rule: rgba(217, 211, 240, 0.34);
-  --rule-soft: rgba(217, 211, 240, 0.12);
+  --rule: rgba(217, 211, 240, 0.22);
+  --rule-soft: rgba(217, 211, 240, 0.1);
 
   --accent: #8aaeec;
   --accent-tint: rgba(138, 174, 236, 0.16);
@@ -105,24 +106,24 @@ body {
 
 /* --------------------------------- Type --------------------------------- */
 
-/* Printed form label: bold grotesque, red index square in front. */
+/* Quiet section label with a small red index square. */
 .eyebrow {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--ink-faint);
 }
 
 .eyebrow::before {
   content: "";
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   background: var(--red-ink);
   flex: none;
 }
@@ -132,16 +133,27 @@ body {
   font-family: var(--font-mono);
 }
 
+/* Whisper-volume paperwork metadata: form numbers, copy tags, refs. */
+.copy-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
 /* ------------------------------- Surfaces ------------------------------- */
 
 .card {
   background: var(--card);
-  border: 2px solid var(--ink);
+  border: 1px solid var(--rule);
   border-radius: 0;
-  box-shadow: 4px 4px 0 0 var(--press);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-/* Black form-title strip; use as first child of a p-0 card. */
+/* Black title bar — reserved for brand and ceremony (sidebar, modals). */
 .strip {
   display: flex;
   align-items: center;
@@ -149,11 +161,11 @@ body {
   gap: 0.75rem;
   background: var(--ink);
   color: var(--card);
-  padding: 0.55rem 1rem;
+  padding: 0.5rem 0.9rem;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -165,33 +177,32 @@ body {
 /* Dotted leader line, like a form's fill-in rule. */
 .tear {
   border: none;
-  border-top: 1.5px dashed var(--rule);
+  border-top: 1.5px dashed var(--rule-soft);
 }
 
-/* Carbon-copy corner tag: "COPY 3 · FILE" */
-.copy-tag {
+/* --------------------------- Badges and stamps --------------------------- */
+
+/* Flat, aligned status badge — the ink colors carry the identity. */
+.badge {
   display: inline-flex;
   align-items: center;
-  border: 1.5px solid var(--ink);
-  padding: 0.25rem 0.55rem;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink);
+  padding: 0.2rem 0.5rem;
   white-space: nowrap;
 }
 
-/* --------------------------------- Stamps -------------------------------- */
-
+/* One ceremonial rubber stamp allowed on screen (the demo mark). */
 @keyframes stamp-in {
   from {
-    transform: rotate(-3deg) scale(1.6);
+    transform: rotate(-2deg) scale(1.5);
     opacity: 0;
   }
   to {
-    transform: rotate(-3deg) scale(1);
+    transform: rotate(-2deg) scale(1);
     opacity: 1;
   }
 }
@@ -199,16 +210,14 @@ body {
 .stamp {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-sans);
-  font-size: 10px;
+  font-family: var(--font-mono);
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  border: 2px solid currentColor;
-  outline: 1.5px solid currentColor;
-  outline-offset: 2px;
-  padding: 0.22rem 0.55rem;
-  transform: rotate(-3deg);
+  border: 1.5px solid currentColor;
+  padding: 0.2rem 0.5rem;
+  transform: rotate(-2deg);
   white-space: nowrap;
   animation: stamp-in 0.24s ease-out both;
 }
@@ -220,18 +229,17 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0.6rem 1.2rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 0;
   font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
   transition:
     transform 100ms ease,
     box-shadow 100ms ease,
     background-color 100ms ease,
+    border-color 100ms ease,
     color 100ms ease;
   cursor: pointer;
 }
@@ -245,21 +253,21 @@ body {
   cursor: not-allowed;
 }
 
-/* Stamp it. */
 .btn-primary {
-  background: var(--red-ink);
+  background: var(--ink);
   color: var(--card);
-  border: 2px solid var(--ink);
-  box-shadow: 4px 4px 0 0 var(--press);
+  border: 1px solid var(--ink);
+  box-shadow: 2px 2px 0 0 var(--rule);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--ink);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 0 var(--rule);
 }
 
 .btn-primary:active:not(:disabled) {
-  transform: translate(3px, 3px);
-  box-shadow: 1px 1px 0 0 var(--press);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--rule);
 }
 
 .btn-primary:disabled {
@@ -272,23 +280,18 @@ body {
 .btn-ghost {
   background: var(--card);
   color: var(--ink);
-  border: 2px solid var(--ink);
+  border: 1px solid var(--rule);
 }
 
 .btn-ghost:hover:not(:disabled) {
+  border-color: var(--ink-faint);
   background: var(--sunken);
-  box-shadow: 3px 3px 0 0 var(--press);
-}
-
-.btn-ghost:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: none;
 }
 
 .btn-void {
   background: transparent;
   color: var(--red-ink);
-  border: 2px solid currentColor;
+  border: 1px solid currentColor;
 }
 
 .btn-void:hover:not(:disabled) {
@@ -300,12 +303,12 @@ body {
 .field {
   width: 100%;
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 14px;
   color: var(--ink);
   background: var(--card);
-  border: 2px solid var(--ink);
+  border: 1px solid var(--rule);
   border-radius: 0;
-  padding: 0.65rem 0.85rem;
+  padding: 0.6rem 0.8rem;
   outline: none;
   transition:
     border-color 100ms ease,
@@ -325,17 +328,14 @@ body {
 .field:disabled {
   background: var(--sunken);
   color: var(--ink-faint);
-  border-color: var(--rule);
 }
 
 .field-label {
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
   font-family: var(--font-sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--ink-soft);
 }
 

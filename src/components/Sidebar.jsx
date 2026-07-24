@@ -28,7 +28,7 @@ function Barcode() {
   let x = 0
 
   return (
-    <svg viewBox="0 0 60 14" aria-hidden="true" className="h-3.5 w-24 text-ink-soft">
+    <svg viewBox="0 0 60 14" aria-hidden="true" className="h-3 w-20 text-ink-faint">
       {bars.map((width, index) => {
         const barX = x
         x += width + 1
@@ -42,66 +42,59 @@ function Barcode() {
 
 function Sidebar() {
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-[18rem] p-5 md:block">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-[17rem] p-5 md:block">
       <div className="card flex h-full flex-col p-0">
         <div className="strip">
           <span>Receipt Flow</span>
-          <span className="font-mono text-[9px] font-bold tracking-[0.1em] opacity-70">
-            RF-00
-          </span>
+          <span className="copy-meta !text-card/60">RF-00</span>
         </div>
 
-        <div className="flex items-center gap-3 border-b-2 border-ink px-4 py-4">
-          <div className="flex h-10 w-10 items-center justify-center bg-ink text-card">
+        <div className="flex items-center gap-3 border-b border-rule px-4 py-4">
+          <div className="flex h-9 w-9 items-center justify-center bg-ink text-card">
             <ReceiptGlyph />
           </div>
 
           <div>
-            <p className="font-display text-sm uppercase leading-tight tracking-tight text-ink">
-              Expense
-              <br />
-              Report
+            <p className="text-sm font-semibold leading-tight text-ink">
+              Expense workspace
             </p>
+            <p className="copy-meta mt-0.5">Ledger No. 0001</p>
           </div>
         </div>
 
-        <nav className="flex flex-1 flex-col gap-1.5 p-4">
+        <nav className="flex flex-1 flex-col gap-0.5 p-3">
           {navItems.map((item) => (
             <NavLink
               key={item.label}
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `group flex items-center gap-3 border-2 px-3 py-2.5 transition ${
+                `group flex items-center gap-3 border-l-2 px-3 py-2.5 transition ${
                   isActive
-                    ? 'border-ink bg-ink text-card shadow-[3px_3px_0_0_var(--press)]'
-                    : 'border-transparent text-ink-soft hover:border-ink hover:bg-sunken hover:text-ink'
+                    ? 'border-red-ink bg-sunken text-ink'
+                    : 'border-transparent text-ink-soft hover:bg-sunken hover:text-ink'
                 }`
               }
             >
               {({ isActive }) => (
                 <>
                   <span
-                    className={`font-mono text-[11px] font-bold tracking-[0.08em] ${
+                    className={`font-mono text-[10px] font-bold tracking-[0.08em] ${
                       isActive ? 'text-red-ink' : 'text-ink-faint group-hover:text-ink-soft'
                     }`}
                   >
                     {item.index}
                   </span>
-                  <span className="text-[13px] font-semibold uppercase tracking-[0.08em]">
-                    {item.label}
-                  </span>
+                  <span className="text-[13px] font-semibold">{item.label}</span>
                 </>
               )}
             </NavLink>
           ))}
         </nav>
 
-        <div className="border-t-2 border-dashed border-rule px-4 py-4">
+        <div className="border-t border-dashed border-rule px-4 py-4">
           <Barcode />
-          <p className="mt-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-ink-faint">
-            RF · Ledger No. 0001
-          </p>
+          <p className="copy-meta mt-1.5">RF · Est. 2026</p>
         </div>
       </div>
     </aside>

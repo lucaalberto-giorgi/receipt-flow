@@ -205,21 +205,20 @@ function UploadReceipt() {
 
   return (
     <section className="min-w-0 space-y-6 sm:space-y-7">
-      <div className="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="eyebrow">Receipt Intake</p>
-          <h2 className="font-display mt-3 text-3xl uppercase tracking-tight text-ink sm:text-4xl">
+          <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[28px]">
             Upload Receipt
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-ink-soft">
+          <p className="mt-1 max-w-2xl text-sm text-ink-soft">
             Drop in a receipt for AI extraction, or type the entry in by hand —
             review the details before posting to the ledger.
           </p>
         </div>
 
-        <div className="flex flex-col items-start gap-2 sm:items-end">
-          <span className="copy-tag bg-carbon-pink">Copy 2 · Intake</span>
-          <span className="figure text-xs font-bold uppercase tracking-[0.06em] text-ink-soft">
+        <div className="flex flex-col items-start gap-1 sm:items-end">
+          <span className="copy-meta">Copy 2 · Intake</span>
+          <span className="copy-meta">
             {isUploading
               ? 'Extracting receipt…'
               : selectedFile
@@ -230,13 +229,11 @@ function UploadReceipt() {
       </div>
 
       {uploadError ? (
-        <p className="figure text-xs font-bold uppercase tracking-[0.08em] text-red-ink">
-          {uploadError}
-        </p>
+        <p className="figure text-xs font-bold text-red-ink">{uploadError}</p>
       ) : null}
 
       {showColdStartHint && isUploading ? (
-        <p className="figure text-xs font-bold tracking-[0.02em] text-red-ink">
+        <p className="figure text-xs font-bold text-red-ink">
           The free-tier server naps between visits — the first extraction can
           take up to a minute while it wakes up.
         </p>

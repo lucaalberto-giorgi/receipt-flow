@@ -10,11 +10,11 @@ function EmptyStateCard({
 }) {
   return (
     <div
-      className={`border-2 border-dashed border-ink bg-card text-center ${
+      className={`border-[1.5px] border-dashed border-rule bg-card text-center ${
         padded ? 'px-5 py-8 sm:px-8 sm:py-12' : 'px-4 py-6 sm:px-5 sm:py-8'
       }`}
     >
-      <div className="mx-auto flex h-12 w-12 items-center justify-center bg-ink text-card">
+      <div className="mx-auto flex h-11 w-11 items-center justify-center bg-ink text-card">
         <svg
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -30,10 +30,8 @@ function EmptyStateCard({
           <path d="M9 14.5h3.5" />
         </svg>
       </div>
-      <p className="mt-5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-ink-faint">
-        {eyebrow} — Nothing on file
-      </p>
-      <h4 className="font-display mt-3 text-lg uppercase tracking-tight text-ink sm:text-xl">
+      <p className="copy-meta mt-5">{eyebrow} — Nothing on file</p>
+      <h4 className="mt-3 text-lg font-bold tracking-tight text-ink">
         {title}
       </h4>
       <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-ink-soft">

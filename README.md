@@ -19,12 +19,12 @@ Upload a receipt image or PDF, review the extracted entry, and post it to the le
 
 ## Design
 
-The app is paperwork, so the UI is a 1970s office form — "Carbon Copy":
+"Carbon Copy" — the app is paperwork, so the identity borrows from office forms, kept at product volume:
 
-- Manila desk surface with white form sheets, hard 2px ink borders, offset-block shadows, zero rounded corners
-- Black form-title strips on every card, with form numbers (RF-01, RF-02…)
-- Values typewritten in Courier Prime; labels set in Archivo
-- Rubber-stamp status badges in ballpoint blue and stamp red; each page tagged like a carbon-copy sheet (COPY 1 · ORIGINAL, COPY 3 · FILE…)
+- Manila desk surface, white form sheets, hairline rules, zero rounded corners
+- Every figure, date, and reference is typewritten (Courier Prime); UI text is Archivo in calm sentence case
+- Status inks: ballpoint blue for Reviewed, stamp red for Pending and Void
+- Paperwork metadata at whisper volume — form numbers (RF-01…), carbon-copy page tags (COPY 1 · ORIGINAL), a barcode, one rubber stamp for the demo mark
 - Dark mode flips the form over to the carbon sheet itself
 
 ## Tech Stack

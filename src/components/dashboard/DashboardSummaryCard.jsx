@@ -1,24 +1,18 @@
 function DashboardSummaryCard({ index, title, value, caption }) {
   return (
-    <article className="card p-0">
-      <div className="strip">
-        <span>{title}</span>
-        <span className="font-mono text-[9px] font-bold tracking-[0.1em] opacity-70">
-          {index}
-        </span>
+    <article className="card p-5">
+      <div className="flex items-start justify-between gap-3">
+        <p className="eyebrow">{title}</p>
+        <span className="copy-meta">{index}</span>
       </div>
 
-      <div className="p-5 sm:p-6">
-        <p className="figure text-3xl font-bold tracking-tight text-ink sm:text-[34px]">
-          {value}
-        </p>
+      <p className="figure mt-4 text-[28px] font-bold tracking-tight text-ink">
+        {value}
+      </p>
 
-        <div className="tear mt-4" />
+      <div className="tear mt-4" />
 
-        <p className="mt-3 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint">
-          {caption}
-        </p>
-      </div>
+      <p className="copy-meta mt-3">{caption}</p>
     </article>
   )
 }

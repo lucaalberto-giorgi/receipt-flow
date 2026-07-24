@@ -1,3 +1,4 @@
+import { Link, useLocation } from 'react-router-dom'
 import { useExpenses } from '../context/useExpenses'
 
 function formatStatementDate() {
@@ -13,17 +14,19 @@ function formatStatementDate() {
 
 function Topbar() {
   const { resetDemoData } = useExpenses()
+  const location = useLocation()
+  const isOnUploadPage = location.pathname === '/upload-receipt'
 
   return (
-    <header className="flex items-center justify-between gap-3 border-b-2 border-ink pb-4 sm:gap-4">
+    <header className="flex items-center justify-between gap-3 border-b border-rule pb-4 sm:gap-4">
       <div className="min-w-0">
-        <p className="font-display text-base uppercase tracking-tight text-ink md:hidden">
+        <p className="font-display text-base tracking-tight text-ink md:hidden">
           Receipt Flow
         </p>
-        <p className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-ink-faint md:block">
+        <p className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint md:block">
           Statement date
         </p>
-        <p className="figure truncate text-xs font-bold tracking-[0.06em] text-ink-soft md:mt-1 md:text-sm">
+        <p className="figure truncate text-xs font-bold tracking-[0.04em] text-ink-soft md:mt-0.5 md:text-[13px]">
           {formatStatementDate()}
         </p>
       </div>
@@ -32,13 +35,19 @@ function Topbar() {
         <button
           type="button"
           onClick={resetDemoData}
-          className="font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint underline decoration-2 underline-offset-4 transition hover:text-red-ink"
+          className="copy-meta underline decoration-dotted underline-offset-4 transition hover:text-red-ink"
           title="Restore the sample expenses"
         >
           Reset
         </button>
 
-        <span className="stamp text-accent">Demo Workspace</span>
+        <span className="stamp hidden text-accent sm:inline-flex">Demo</span>
+
+        {!isOnUploadPage && (
+          <Link to="/upload-receipt" className="btn btn-primary">
+            Upload receipt
+          </Link>
+        )}
       </div>
     </header>
   )
