@@ -25,118 +25,121 @@ function ReceiptUploader({
   const isImagePreview = Boolean(previewUrl)
 
   return (
-    <article className="card min-w-0 p-5 sm:p-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-        <div>
-          <p className="eyebrow">Source Document</p>
-          <h3 className="font-display mt-2 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-            Receipt File
-          </h3>
-          <p className="mt-2 text-sm text-ink-soft">
-            Upload a receipt image or PDF for extraction.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          disabled={isUploading}
-          onClick={onBrowseClick}
-          className="btn btn-ghost"
-        >
-          {isUploading
-            ? 'Extracting…'
-            : selectedFile
-              ? 'Replace file'
-              : 'Choose file'}
-        </button>
+    <article className="card min-w-0 p-0">
+      <div className="strip">
+        <span>Source Document — Receipt File</span>
+        <span className="font-mono text-[9px] font-bold tracking-[0.1em] opacity-70">
+          RF-01
+        </span>
       </div>
 
-      <div
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
-        onDrop={onDrop}
-        className={`mt-5 overflow-hidden rounded-[10px] border-[1.5px] border-dashed p-3 transition sm:mt-6 sm:p-4 ${
-          isDragOver
-            ? 'border-accent bg-accent-tint'
-            : 'border-rule bg-sunken/60 hover:border-ink-faint'
-        } ${isUploading ? 'pointer-events-none opacity-75' : ''}`}
-      >
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*,application/pdf"
-          className="hidden"
-          onChange={onFileInputChange}
-        />
+      <div className="p-5 sm:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <p className="text-sm text-ink-soft">
+            Upload a receipt image or PDF for extraction.
+          </p>
 
-        {!selectedFile && (
-          <div className="flex min-h-[320px] flex-col items-center justify-center rounded-md px-4 text-center sm:min-h-[440px] sm:px-6">
-            <div className="flex h-14 w-14 items-center justify-center rounded-md bg-accent-solid text-on-accent">
-              <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 16V5" />
-                <path d="m7 10 5-5 5 5" />
-                <path d="M5 19h14" />
-              </svg>
-            </div>
-            <p className="eyebrow mt-6">Drop Receipt Here</p>
-            <h4 className="font-display mt-4 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-              Drag and drop your receipt
-            </h4>
-            <p className="mt-3 max-w-sm text-sm leading-6 text-ink-soft">
-              Drop a JPG, PNG, or PDF here, or use the button above to browse
-              for a file.
-            </p>
-          </div>
-        )}
+          <button
+            type="button"
+            disabled={isUploading}
+            onClick={onBrowseClick}
+            className="btn btn-ghost"
+          >
+            {isUploading
+              ? 'Extracting…'
+              : selectedFile
+                ? 'Replace file'
+                : 'Choose file'}
+          </button>
+        </div>
 
-        {selectedFile && isImagePreview && (
-          <div className="space-y-3">
-            <div className="overflow-hidden rounded-md border border-rule bg-card">
-              <img
-                src={previewUrl}
-                alt="Receipt preview"
-                className="h-72 w-full object-cover object-top sm:h-[440px]"
-              />
-            </div>
+        <div
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
+          className={`mt-5 overflow-hidden border-2 border-dashed p-3 transition sm:p-4 ${
+            isDragOver
+              ? 'border-accent bg-accent-tint'
+              : 'border-ink bg-sunken/60 hover:bg-sunken'
+          } ${isUploading ? 'pointer-events-none opacity-75' : ''}`}
+        >
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*,application/pdf"
+            className="hidden"
+            onChange={onFileInputChange}
+          />
 
-            <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-rule bg-card px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
-              <span className="figure max-w-full break-all text-xs font-medium text-ink">
-                {selectedFile.name}
-              </span>
-              <span className="figure text-xs text-ink-soft">
-                {isUploading ? 'Extracting receipt…' : formatFileSize(selectedFile.size)}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {selectedFile && !isImagePreview && (
-          <div className="flex min-h-[320px] items-center justify-center rounded-md p-4 sm:min-h-[440px] sm:p-6">
-            <div className="max-w-sm text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-md bg-accent-solid font-mono text-sm font-semibold tracking-[0.1em] text-on-accent">
-                PDF
+          {!selectedFile && (
+            <div className="flex min-h-[320px] flex-col items-center justify-center px-4 text-center sm:min-h-[440px] sm:px-6">
+              <div className="flex h-14 w-14 items-center justify-center bg-ink text-card">
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="square"
+                >
+                  <path d="M12 16V5" />
+                  <path d="m7 10 5-5 5 5" />
+                  <path d="M5 19h14" />
+                </svg>
               </div>
-              <h4 className="font-display mt-6 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-                File ready for review
+              <h4 className="font-display mt-6 text-xl uppercase tracking-tight text-ink sm:text-2xl">
+                Drop receipt here
               </h4>
-              <p className="figure mt-3 break-all text-sm leading-6 text-ink-soft">
-                {selectedFile.name}
+              <p className="mt-3 max-w-sm text-sm leading-6 text-ink-soft">
+                Drag and drop, or use the button above to browse for a file.
               </p>
-              <p className="mt-2 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-accent">
-                {formatFileSize(selectedFile.size)}
+              <p className="figure mt-5 text-[10px] font-bold uppercase tracking-[0.18em] text-ink-faint">
+                Accepts: JPG · PNG · WEBP · PDF
               </p>
             </div>
-          </div>
-        )}
+          )}
+
+          {selectedFile && isImagePreview && (
+            <div className="space-y-3">
+              <div className="overflow-hidden border-2 border-ink bg-card">
+                <img
+                  src={previewUrl}
+                  alt="Receipt preview"
+                  className="h-72 w-full object-cover object-top sm:h-[440px]"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 border-2 border-ink bg-card px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
+                <span className="figure max-w-full break-all text-xs font-bold text-ink">
+                  {selectedFile.name}
+                </span>
+                <span className="figure text-xs text-ink-soft">
+                  {isUploading ? 'Extracting receipt…' : formatFileSize(selectedFile.size)}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {selectedFile && !isImagePreview && (
+            <div className="flex min-h-[320px] items-center justify-center p-4 sm:min-h-[440px] sm:p-6">
+              <div className="max-w-sm text-center">
+                <div className="figure mx-auto flex h-16 w-16 items-center justify-center bg-ink text-sm font-bold tracking-[0.1em] text-card">
+                  PDF
+                </div>
+                <h4 className="font-display mt-6 text-xl uppercase tracking-tight text-ink sm:text-2xl">
+                  File ready for review
+                </h4>
+                <p className="figure mt-3 break-all text-sm leading-6 text-ink-soft">
+                  {selectedFile.name}
+                </p>
+                <p className="figure mt-2 text-[11px] font-bold uppercase tracking-[0.18em] text-red-ink">
+                  {formatFileSize(selectedFile.size)}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </article>
   )

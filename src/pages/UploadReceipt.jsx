@@ -205,10 +205,10 @@ function UploadReceipt() {
 
   return (
     <section className="min-w-0 space-y-6 sm:space-y-7">
-      <div className="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
+      <div className="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="eyebrow">Receipt Intake</p>
-          <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          <h2 className="font-display mt-3 text-3xl uppercase tracking-tight text-ink sm:text-4xl">
             Upload Receipt
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-ink-soft">
@@ -217,23 +217,26 @@ function UploadReceipt() {
           </p>
         </div>
 
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint">
-          {isUploading
-            ? 'Extracting receipt…'
-            : selectedFile
-              ? 'Receipt parsed'
-              : 'Waiting for upload'}
-        </span>
+        <div className="flex flex-col items-start gap-2 sm:items-end">
+          <span className="copy-tag bg-carbon-pink">Copy 2 · Intake</span>
+          <span className="figure text-xs font-bold uppercase tracking-[0.06em] text-ink-soft">
+            {isUploading
+              ? 'Extracting receipt…'
+              : selectedFile
+                ? 'Receipt parsed'
+                : 'Waiting for upload'}
+          </span>
+        </div>
       </div>
 
       {uploadError ? (
-        <p className="font-mono text-xs uppercase tracking-[0.1em] text-red-ink">
+        <p className="figure text-xs font-bold uppercase tracking-[0.08em] text-red-ink">
           {uploadError}
         </p>
       ) : null}
 
       {showColdStartHint && isUploading ? (
-        <p className="font-mono text-xs tracking-[0.04em] text-amber-ink">
+        <p className="figure text-xs font-bold tracking-[0.02em] text-red-ink">
           The free-tier server naps between visits — the first extraction can
           take up to a minute while it wakes up.
         </p>

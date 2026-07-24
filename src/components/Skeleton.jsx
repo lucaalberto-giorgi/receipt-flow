@@ -1,4 +1,4 @@
-function Skeleton({ className = '', rounded = 'rounded-md' }) {
+function Skeleton({ className = '', rounded = '' }) {
   return (
     <div
       aria-hidden="true"

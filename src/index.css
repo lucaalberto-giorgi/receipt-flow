@@ -2,61 +2,59 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
-   Receipt Flow — "The Ledger" design system
-   Warm paper, printed ink, monospace figures, perforated edges, accounting
-   green. Every token flips for dark mode ("after-hours ledger") via .dark.
+   Receipt Flow — "Carbon Copy" design system
+   The app is paperwork, so the UI is a 1970s office form: manila desk, white
+   form sheets with hard ink borders and offset-block shadows, black header
+   strips, typewritten figures, rubber stamps in ballpoint blue and stamp red.
+   Zero rounded corners. Dark mode is the carbon sheet itself.
 --------------------------------------------------------------------------- */
 
 :root {
   color-scheme: light;
 
-  --paper: #f5f0e4;
-  --card: #fdfaf2;
-  --sunken: #eee8d8;
-  --ink: #211e15;
-  --ink-soft: rgba(33, 30, 21, 0.64);
-  --ink-faint: rgba(33, 30, 21, 0.4);
-  --rule: rgba(33, 30, 21, 0.18);
-  --rule-soft: rgba(33, 30, 21, 0.09);
+  --paper: #e7dbb6; /* manila desk */
+  --card: #fcfaf1; /* the form sheet */
+  --sunken: #efe8d2;
+  --ink: #17140d;
+  --ink-soft: rgba(23, 20, 13, 0.66);
+  --ink-faint: rgba(23, 20, 13, 0.42);
+  --rule: rgba(23, 20, 13, 0.3);
+  --rule-soft: rgba(23, 20, 13, 0.12);
 
-  --accent: #1d5b3f;
-  --accent-solid: #1d5b3f;
-  --accent-deep: #14452f;
-  --accent-tint: #e2ebdc;
-  --on-accent: #f7f3e8;
+  --accent: #2452a8; /* ballpoint blue */
+  --accent-tint: #d6e2f2;
+  --red-ink: #c22f1a; /* stamp red */
+  --red-tint: #f6dad2;
 
-  --amber-ink: #8a5c10;
-  --amber-tint: #f3e6c2;
-  --red-ink: #a03b2e;
-  --red-tint: #f3ddd2;
+  --carbon-yellow: #f2e296;
+  --carbon-pink: #f3cec4;
+  --carbon-blue: #cfe0f0;
 
-  --press: rgba(33, 30, 21, 0.22);
+  --press: #17140d; /* hard offset shadow */
 }
 
 .dark {
   color-scheme: dark;
 
-  --paper: #16140f;
-  --card: #1e1b14;
-  --sunken: #12100b;
-  --ink: #ece5d3;
-  --ink-soft: rgba(236, 229, 211, 0.66);
-  --ink-faint: rgba(236, 229, 211, 0.42);
-  --rule: rgba(236, 229, 211, 0.18);
-  --rule-soft: rgba(236, 229, 211, 0.09);
+  --paper: #141120; /* carbon-paper purple-black */
+  --card: #1d1930;
+  --sunken: #272141;
+  --ink: #d9d3f0;
+  --ink-soft: rgba(217, 211, 240, 0.66);
+  --ink-faint: rgba(217, 211, 240, 0.42);
+  --rule: rgba(217, 211, 240, 0.34);
+  --rule-soft: rgba(217, 211, 240, 0.12);
 
-  --accent: #7cc7a0;
-  --accent-solid: #2c7a54;
-  --accent-deep: #38946a;
-  --accent-tint: rgba(124, 199, 160, 0.13);
-  --on-accent: #f2efe4;
+  --accent: #8aaeec;
+  --accent-tint: rgba(138, 174, 236, 0.16);
+  --red-ink: #e5705b;
+  --red-tint: rgba(229, 112, 91, 0.15);
 
-  --amber-ink: #d8ab55;
-  --amber-tint: rgba(216, 171, 85, 0.14);
-  --red-ink: #d97b6b;
-  --red-tint: rgba(217, 123, 107, 0.14);
+  --carbon-yellow: rgba(242, 226, 150, 0.14);
+  --carbon-pink: rgba(243, 206, 196, 0.14);
+  --carbon-blue: rgba(207, 224, 240, 0.14);
 
-  --press: rgba(0, 0, 0, 0.55);
+  --press: #060410;
 }
 
 @theme inline {
@@ -69,18 +67,16 @@
   --color-rule: var(--rule);
   --color-rule-soft: var(--rule-soft);
   --color-accent: var(--accent);
-  --color-accent-solid: var(--accent-solid);
-  --color-accent-deep: var(--accent-deep);
   --color-accent-tint: var(--accent-tint);
-  --color-on-accent: var(--on-accent);
-  --color-amber-ink: var(--amber-ink);
-  --color-amber-tint: var(--amber-tint);
   --color-red-ink: var(--red-ink);
   --color-red-tint: var(--red-tint);
+  --color-carbon-yellow: var(--carbon-yellow);
+  --color-carbon-pink: var(--carbon-pink);
+  --color-carbon-blue: var(--carbon-blue);
 
-  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
-  --font-sans: "IBM Plex Sans", "Helvetica Neue", sans-serif;
-  --font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+  --font-display: "Archivo Black", "Arial Black", sans-serif;
+  --font-sans: "Archivo", "Helvetica Neue", sans-serif;
+  --font-mono: "Courier Prime", "Courier New", monospace;
 }
 
 :root {
@@ -103,94 +99,118 @@ body {
 }
 
 ::selection {
-  background: var(--accent-solid);
-  color: var(--on-accent);
-}
-
-/* Paper grain — a faint printed-stock texture over everything. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.dark body::before {
-  opacity: 0.35;
+  background: var(--red-ink);
+  color: var(--card);
 }
 
 /* --------------------------------- Type --------------------------------- */
 
+/* Printed form label: bold grotesque, red index square in front. */
 .eyebrow {
-  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--ink);
 }
 
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--red-ink);
+  flex: none;
+}
+
+/* Typewritten value. */
 .figure {
   font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
 }
 
 /* ------------------------------- Surfaces ------------------------------- */
 
 .card {
   background: var(--card);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 0 var(--press);
 }
 
-/* Perforated tear line between sections. */
+/* Black form-title strip; use as first child of a p-0 card. */
+.strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--ink);
+  color: var(--card);
+  padding: 0.55rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.strip-red {
+  background: var(--red-ink);
+  color: var(--card);
+}
+
+/* Dotted leader line, like a form's fill-in rule. */
 .tear {
   border: none;
   border-top: 1.5px dashed var(--rule);
 }
 
-/* Receipt stub: no bottom border, sawtooth tear along the bottom edge. */
-.receipt-stub {
-  position: relative;
-  background: var(--card);
-  border: 1px solid var(--rule);
-  border-bottom: none;
-  border-radius: 10px 10px 0 0;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.06));
-}
-
-.receipt-stub::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -7px;
-  height: 7px;
-  background:
-    linear-gradient(-135deg, var(--card) 5px, transparent 0) 0 0,
-    linear-gradient(135deg, var(--card) 5px, transparent 0) 7px 0;
-  background-size: 14px 14px;
-  background-repeat: repeat-x;
+/* Carbon-copy corner tag: "COPY 3 · FILE" */
+.copy-tag {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--ink);
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
 }
 
 /* --------------------------------- Stamps -------------------------------- */
 
+@keyframes stamp-in {
+  from {
+    transform: rotate(-3deg) scale(1.6);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(-3deg) scale(1);
+    opacity: 1;
+  }
+}
+
 .stamp {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  border: 1.5px solid currentColor;
-  border-radius: 4px;
-  padding: 0.2rem 0.55rem;
-  transform: rotate(-1.5deg);
+  border: 2px solid currentColor;
+  outline: 1.5px solid currentColor;
+  outline-offset: 2px;
+  padding: 0.22rem 0.55rem;
+  transform: rotate(-3deg);
   white-space: nowrap;
+  animation: stamp-in 0.24s ease-out both;
 }
 
 /* -------------------------------- Buttons -------------------------------- */
@@ -201,19 +221,18 @@ body::before {
   justify-content: center;
   gap: 0.5rem;
   min-height: 2.75rem;
-  padding: 0.6rem 1.1rem;
-  border-radius: 6px;
-  font-family: var(--font-mono);
+  padding: 0.6rem 1.2rem;
+  border-radius: 0;
+  font-family: var(--font-sans);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   transition:
-    transform 120ms ease,
-    box-shadow 120ms ease,
-    background-color 120ms ease,
-    border-color 120ms ease,
-    color 120ms ease;
+    transform 100ms ease,
+    box-shadow 100ms ease,
+    background-color 100ms ease,
+    color 100ms ease;
   cursor: pointer;
 }
 
@@ -226,19 +245,20 @@ body::before {
   cursor: not-allowed;
 }
 
+/* Stamp it. */
 .btn-primary {
-  background: var(--accent-solid);
-  color: var(--on-accent);
-  border: 1px solid var(--accent-deep);
-  box-shadow: 3px 3px 0 0 var(--press);
+  background: var(--red-ink);
+  color: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 0 var(--press);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--accent-deep);
+  background: var(--ink);
 }
 
 .btn-primary:active:not(:disabled) {
-  transform: translate(2px, 2px);
+  transform: translate(3px, 3px);
   box-shadow: 1px 1px 0 0 var(--press);
 }
 
@@ -252,18 +272,23 @@ body::before {
 .btn-ghost {
   background: var(--card);
   color: var(--ink);
-  border: 1px solid var(--rule);
+  border: 2px solid var(--ink);
 }
 
 .btn-ghost:hover:not(:disabled) {
-  border-color: var(--ink-faint);
   background: var(--sunken);
+  box-shadow: 3px 3px 0 0 var(--press);
+}
+
+.btn-ghost:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .btn-void {
   background: transparent;
   color: var(--red-ink);
-  border: 1px solid currentColor;
+  border: 2px solid currentColor;
 }
 
 .btn-void:hover:not(:disabled) {
@@ -275,20 +300,21 @@ body::before {
 .field {
   width: 100%;
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 15px;
   color: var(--ink);
   background: var(--card);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 0.7rem 0.9rem;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 0.65rem 0.85rem;
   outline: none;
   transition:
-    border-color 120ms ease,
-    box-shadow 120ms ease;
+    border-color 100ms ease,
+    box-shadow 100ms ease;
 }
 
 .field::placeholder {
   color: var(--ink-faint);
+  font-style: italic;
 }
 
 .field:focus {
@@ -299,15 +325,16 @@ body::before {
 .field:disabled {
   background: var(--sunken);
   color: var(--ink-faint);
+  border-color: var(--rule);
 }
 
 .field-label {
   display: block;
-  margin-bottom: 0.45rem;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
@@ -317,7 +344,7 @@ body::before {
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -326,20 +353,21 @@ body::before {
 }
 
 .reveal {
-  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation: rise 0.3s cubic-bezier(0.3, 0.9, 0.4, 1) both;
 }
 
-.reveal-1 { animation-delay: 60ms; }
-.reveal-2 { animation-delay: 130ms; }
-.reveal-3 { animation-delay: 200ms; }
-.reveal-4 { animation-delay: 270ms; }
+.reveal-1 { animation-delay: 50ms; }
+.reveal-2 { animation-delay: 110ms; }
+.reveal-3 { animation-delay: 170ms; }
+.reveal-4 { animation-delay: 230ms; }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-1,
   .reveal-2,
   .reveal-3,
-  .reveal-4 {
+  .reveal-4,
+  .stamp {
     animation: none;
   }
 }

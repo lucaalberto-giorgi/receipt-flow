@@ -2,21 +2,19 @@ import EmptyStateCard from '../EmptyStateCard'
 import Skeleton from '../Skeleton'
 
 function StatusStamp({ status }) {
-  const color = status === 'Reviewed' ? 'text-accent' : 'text-amber-ink'
+  const color = status === 'Reviewed' ? 'text-accent' : 'text-red-ink'
 
   return <span className={`stamp ${color}`}>{status}</span>
 }
 
 function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpense }) {
   return (
-    <section className="card overflow-hidden">
-      <div className="flex items-center justify-between border-b border-dashed border-rule px-5 py-4 sm:px-6">
-        <div>
-          <p className="eyebrow">Expense Ledger</p>
-          <h3 className="font-display mt-2 text-lg font-semibold tracking-tight text-ink sm:text-xl">
-            Recent expenses
-          </h3>
-        </div>
+    <section className="card overflow-hidden p-0">
+      <div className="strip">
+        <span>Expense Ledger — Recent Expenses</span>
+        <span className="font-mono text-[9px] font-bold tracking-[0.1em] opacity-70">
+          RF-05
+        </span>
       </div>
 
       <div className="overflow-x-auto">
@@ -34,9 +32,9 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
                   </div>
                   <Skeleton className="h-4 w-20 self-center" />
                   <Skeleton className="h-4 w-16 self-center" />
-                  <Skeleton className="h-5 w-20 self-center" rounded="rounded-[3px]" />
-                  <Skeleton className="h-6 w-24 self-center" rounded="rounded-[4px]" />
-                  <Skeleton className="h-8 w-16 self-center" rounded="rounded-md" />
+                  <Skeleton className="h-5 w-20 self-center" />
+                  <Skeleton className="h-6 w-24 self-center" />
+                  <Skeleton className="h-8 w-16 self-center" />
                 </div>
               ))}
             </div>
@@ -46,59 +44,71 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
             <table className="min-w-[720px] border-separate border-spacing-0 sm:min-w-full">
               <thead>
                 <tr className="bg-sunken text-left">
-                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
+                  <th className="border-b-2 border-ink px-5 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-ink sm:px-6">
                     Merchant
                   </th>
-                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
+                  <th className="border-b-2 border-ink px-5 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-ink sm:px-6">
                     Date
                   </th>
-                  <th className="px-5 py-3 text-right font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
+                  <th className="border-b-2 border-ink px-5 py-3 text-right text-[10px] font-bold uppercase tracking-[0.18em] text-ink sm:px-6">
                     Amount
                   </th>
-                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
+                  <th className="border-b-2 border-ink px-5 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-ink sm:px-6">
                     Category
                   </th>
-                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
+                  <th className="border-b-2 border-ink px-5 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-ink sm:px-6">
                     Status
                   </th>
-                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
+                  <th className="border-b-2 border-ink px-5 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-ink sm:px-6">
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {expenses.map((expense) => (
+                {expenses.map((expense, rowIndex) => (
                   <tr
                     key={expense.id}
-                    className="text-sm text-ink-soft transition hover:bg-sunken/50"
+                    className="text-sm text-ink-soft transition hover:bg-sunken/60"
                   >
-                    <td className="border-t border-rule-soft px-5 py-3.5 sm:px-6">
+                    <td
+                      className={`px-5 py-3.5 sm:px-6 ${rowIndex > 0 ? 'border-t border-rule-soft' : ''}`}
+                    >
                       <div>
-                        <p className="font-medium text-ink">{expense.merchant}</p>
-                        <p className="figure mt-1 text-[10px] uppercase tracking-[0.14em] text-ink-faint">
+                        <p className="font-semibold text-ink">{expense.merchant}</p>
+                        <p className="figure mt-1 text-[10px] font-bold uppercase tracking-[0.12em] text-ink-faint">
                           {expense.reference}
                         </p>
                       </div>
                     </td>
-                    <td className="figure border-t border-rule-soft px-5 py-3.5 text-[13px] sm:px-6">
+                    <td
+                      className={`figure px-5 py-3.5 text-[13px] sm:px-6 ${rowIndex > 0 ? 'border-t border-rule-soft' : ''}`}
+                    >
                       {expense.date}
                     </td>
-                    <td className="figure border-t border-rule-soft px-5 py-3.5 text-right font-semibold text-ink sm:px-6">
+                    <td
+                      className={`figure px-5 py-3.5 text-right font-bold text-ink sm:px-6 ${rowIndex > 0 ? 'border-t border-rule-soft' : ''}`}
+                    >
                       {expense.amount}
                     </td>
-                    <td className="border-t border-rule-soft px-5 py-3.5 sm:px-6">
-                      <span className="rounded-[3px] border border-rule bg-sunken px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+                    <td
+                      className={`px-5 py-3.5 sm:px-6 ${rowIndex > 0 ? 'border-t border-rule-soft' : ''}`}
+                    >
+                      <span className="border border-ink bg-carbon-yellow px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-ink">
                         {expense.category}
                       </span>
                     </td>
-                    <td className="border-t border-rule-soft px-5 py-3.5 sm:px-6">
+                    <td
+                      className={`px-5 py-3.5 sm:px-6 ${rowIndex > 0 ? 'border-t border-rule-soft' : ''}`}
+                    >
                       <StatusStamp status={expense.status} />
                     </td>
-                    <td className="border-t border-rule-soft px-5 py-3.5 sm:px-6">
+                    <td
+                      className={`px-5 py-3.5 sm:px-6 ${rowIndex > 0 ? 'border-t border-rule-soft' : ''}`}
+                    >
                       <button
                         type="button"
                         onClick={() => onDeleteExpense(expense.id)}
-                        className="inline-flex min-h-9 items-center rounded-md border border-red-ink/50 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-red-ink transition hover:bg-red-tint"
+                        className="inline-flex min-h-9 items-center border-2 border-red-ink px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-red-ink transition hover:bg-red-tint"
                       >
                         Void
                       </button>

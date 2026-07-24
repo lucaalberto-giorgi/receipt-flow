@@ -19,12 +19,13 @@ Upload a receipt image or PDF, review the extracted entry, and post it to the le
 
 ## Design
 
-The UI is built around a receipt/ledger identity rather than a generic dashboard template:
+The app is paperwork, so the UI is a 1970s office form — "Carbon Copy":
 
-- Warm paper canvas with a printed-stock grain
-- Fraunces for display type, IBM Plex Mono for every figure, date, and reference
-- Perforated tear-line dividers and sawtooth receipt-stub stat cards
-- Rubber-stamp status badges and a deep accounting-green accent
+- Manila desk surface with white form sheets, hard 2px ink borders, offset-block shadows, zero rounded corners
+- Black form-title strips on every card, with form numbers (RF-01, RF-02…)
+- Values typewritten in Courier Prime; labels set in Archivo
+- Rubber-stamp status badges in ballpoint blue and stamp red; each page tagged like a carbon-copy sheet (COPY 1 · ORIGINAL, COPY 3 · FILE…)
+- Dark mode flips the form over to the carbon sheet itself
 
 ## Tech Stack
 
