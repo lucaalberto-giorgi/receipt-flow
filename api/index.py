@@ -2,19 +2,17 @@ import base64
 import json
 import os
 import re
-
-from dotenv import load_dotenv
-
-load_dotenv()
 from io import BytesIO
+
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-
-try:
-    from pdf2image import convert_from_bytes
-except ImportError:
-    convert_from_bytes = None
 
 try:
     from pypdf import PdfReader
@@ -25,11 +23,6 @@ try:
     from openai import OpenAI
 except ImportError:
     OpenAI = None
-
-try:
-    import pytesseract
-except ImportError:
-    pytesseract = None
 
 app = FastAPI()
 
@@ -50,9 +43,10 @@ client = (
     else None
 )
 
+# In production the API is same-origin (/api/*); CORS is only needed for
+# local development, where Vite runs on 5173 and uvicorn on 8000.
 allow_origins = [
     "http://localhost:5173",
-    "https://receipt-flow-neon.vercel.app",
 ]
 
 
@@ -72,6 +66,14 @@ Category must be one of: Food, Travel, Shopping, Utilities, Entertainment, Other
 """
 
 
+def strip_markdown_fences(text: str) -> str:
+    text = text.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```(?:\w+)?\s*", "", text)
+        text = re.sub(r"\s*```$", "", text)
+    return text.strip()
+
+
 def extract_with_ai(extracted_text: str) -> dict | None:
     if client is None or not extracted_text.strip():
         return None
@@ -84,10 +86,7 @@ def extract_with_ai(extracted_text: str) -> dict | None:
                 {"role": "user", "content": f"Receipt text:\n{extracted_text}"},
             ],
         )
-        response_text = response.output_text.strip()
-        if response_text.startswith("```"):
-            response_text = re.sub(r"^```(?:json)?\s*", "", response_text)
-            response_text = re.sub(r"\s*```$", "", response_text)
+        response_text = strip_markdown_fences(response.output_text)
         parsed = json.loads(response_text)
     except Exception:
         return None
@@ -143,6 +142,7 @@ def extract_with_ai(extracted_text: str) -> dict | None:
         "items": normalized_items,
     }
 
+
 IMAGE_MIME_BY_EXTENSION = {
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
@@ -190,21 +190,7 @@ def transcribe_image_with_ai(file_bytes: bytes, content_type: str | None, filena
                 }
             ],
         )
-        return response.output_text.strip()
-    except Exception:
-        return ""
-
-
-def transcribe_image_with_ocr(file_bytes: bytes) -> str:
-    """Local OCR fallback for image uploads when no AI client is configured."""
-    if pytesseract is None:
-        return ""
-
-    try:
-        from PIL import Image
-
-        image = Image.open(BytesIO(file_bytes))
-        return (pytesseract.image_to_string(image) or "").strip()
+        return strip_markdown_fences(response.output_text)
     except Exception:
         return ""
 
@@ -217,11 +203,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def read_root():
+
+@app.get("/api/health")
+def read_health():
     return {"message": "Receipt Flow backend is running"}
 
-@app.post("/extract-receipt")
+
+@app.post("/api/extract-receipt")
 async def extract_receipt(file: UploadFile | None = File(None)):
     if file is None or not file.filename:
         raise HTTPException(status_code=400, detail="No file uploaded.")
@@ -267,9 +255,6 @@ async def extract_receipt(file: UploadFile | None = File(None)):
                 ).strip()
     else:
         extracted_text = transcribe_image_with_ai(file_bytes, content_type, filename)
-
-        if not extracted_text:
-            extracted_text = transcribe_image_with_ocr(file_bytes)
 
     merchant = "Tesco"
     merchant_source = " ".join(extracted_text.split())

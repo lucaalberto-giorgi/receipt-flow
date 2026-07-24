@@ -29,31 +29,31 @@ Upload a receipt image or PDF, review the extracted entry, and post it to the le
 
 ## Tech Stack
 
-- **Frontend:** React, Vite, Tailwind CSS v4 — deployed on Vercel
-- **Backend:** FastAPI, OpenAI, pypdf — deployed on Render
+- **Frontend:** React, Vite, Tailwind CSS v4
+- **Backend:** FastAPI (Python serverless function), OpenAI, pypdf
+- **Hosting:** everything on Vercel — the frontend and the `/api` function deploy together from one repo
 
 ## How It Works
 
-1. Upload a receipt (JPG, PNG, WEBP, or PDF). The backend extracts the text — pypdf for PDFs, the vision model for photos — and OpenAI turns it into a structured expense.
+1. Upload a receipt (JPG, PNG, WEBP, or PDF). Large photos are downscaled in the browser first; the API extracts the text — pypdf for PDFs, the vision model for photos — and OpenAI turns it into a structured expense.
 2. Review the prefilled form, adjust anything, and post it to the ledger.
 3. Or skip the file entirely and enter the expense manually.
 
-Saved expenses appear in the Expenses page and update the Dashboard automatically. The free-tier backend sleeps between visits; the app pings it on load to hide the cold start.
+Saved expenses appear in the Expenses page and update the Dashboard automatically. In production the API is same-origin (`/api/extract-receipt`), so there is no CORS and no separate backend host to keep warm.
 
 ## Running Locally
 
 ```bash
-# Frontend
+# Frontend (Vite on 5173)
 npm install
 npm run dev
 
-# Backend
-cd backend
+# API (uvicorn on 8000)
 pip install -r requirements.txt
-uvicorn main:app --reload
+uvicorn api.index:app --reload --port 8000
 ```
 
-Set `VITE_API_URL` in `.env` to point the frontend at the backend, and `OPENAI_API_KEY` in `backend/.env` for AI extraction.
+`.env.development` points the frontend at `http://localhost:8000`. Copy `.env.example` to `.env` and set `OPENAI_API_KEY` for AI extraction (without it, PDFs fall back to regex parsing and photos return placeholder data).
 
 ## 📸 Screenshots
 

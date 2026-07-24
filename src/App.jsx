@@ -30,16 +30,6 @@ function App() {
     localStorage.setItem(THEME_STORAGE_KEY, theme)
   }, [theme])
 
-  // Wake the free-tier backend as soon as the app loads so a receipt upload
-  // doesn't have to sit through the ~50s cold start.
-  useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL
-
-    if (apiUrl) {
-      fetch(`${apiUrl}/`).catch(() => {})
-    }
-  }, [])
-
   function toggleTheme() {
     setTheme((currentTheme) =>
       currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME,

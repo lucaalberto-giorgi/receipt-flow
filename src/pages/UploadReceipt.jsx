@@ -3,8 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import ExtractedExpenseForm from '../components/upload-receipt/ExtractedExpenseForm'
 import ReceiptUploader from '../components/upload-receipt/ReceiptUploader'
 import { useExpenses } from '../context/useExpenses'
+import {
+  FileTooLargeError,
+  prepareReceiptFile,
+} from '../utils/prepareReceiptFile'
 
-const API_URL = import.meta.env.VITE_API_URL
+// Same-origin in production (Vercel functions); VITE_API_URL points local
+// dev at uvicorn on 8000.
+const API_URL = import.meta.env.VITE_API_URL ?? ''
 
 const EMPTY_FORM = {
   merchant: '',
@@ -14,7 +20,7 @@ const EMPTY_FORM = {
   notes: '',
 }
 
-const COLD_START_HINT_DELAY_MS = 6000
+const SLOW_EXTRACTION_HINT_DELAY_MS = 6000
 
 function UploadReceipt() {
   const navigate = useNavigate()
@@ -25,7 +31,7 @@ function UploadReceipt() {
   const [isDragOver, setIsDragOver] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState('')
-  const [showColdStartHint, setShowColdStartHint] = useState(false)
+  const [showSlowExtractionHint, setShowSlowExtractionHint] = useState(false)
   const [formData, setFormData] = useState(EMPTY_FORM)
 
   useEffect(() => {
@@ -40,17 +46,16 @@ function UploadReceipt() {
     return () => URL.revokeObjectURL(objectUrl)
   }, [selectedFile])
 
-  // The free-tier backend sleeps between visits; surface a note when the
-  // first extraction is taking noticeably long.
+  // Surface a note when extraction is taking noticeably long.
   useEffect(() => {
     if (!isUploading) {
-      setShowColdStartHint(false)
+      setShowSlowExtractionHint(false)
       return undefined
     }
 
     const timeoutId = setTimeout(
-      () => setShowColdStartHint(true),
-      COLD_START_HINT_DELAY_MS,
+      () => setShowSlowExtractionHint(true),
+      SLOW_EXTRACTION_HINT_DELAY_MS,
     )
 
     return () => clearTimeout(timeoutId)
@@ -100,15 +105,29 @@ function UploadReceipt() {
   }
 
   async function requestExtraction(file) {
-    setSelectedFile(file)
     setUploadError('')
     setIsUploading(true)
 
+    let preparedFile
+    try {
+      preparedFile = await prepareReceiptFile(file)
+    } catch (error) {
+      setIsUploading(false)
+      setUploadError(
+        error instanceof FileTooLargeError
+          ? error.message
+          : 'Unable to read that file. Please try another one.',
+      )
+      return
+    }
+
+    setSelectedFile(preparedFile)
+
     const requestBody = new FormData()
-    requestBody.append('file', file)
+    requestBody.append('file', preparedFile)
 
     try {
-      const response = await fetch(`${API_URL}/extract-receipt`, {
+      const response = await fetch(`${API_URL}/api/extract-receipt`, {
         method: 'POST',
         body: requestBody,
       })
@@ -232,10 +251,9 @@ function UploadReceipt() {
         <p className="figure text-xs font-bold text-red-ink">{uploadError}</p>
       ) : null}
 
-      {showColdStartHint && isUploading ? (
+      {showSlowExtractionHint && isUploading ? (
         <p className="figure text-xs font-bold text-red-ink">
-          The free-tier server naps between visits — the first extraction can
-          take up to a minute while it wakes up.
+          Still extracting — detailed receipts can take a few extra seconds.
         </p>
       ) : null}
 
