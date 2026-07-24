@@ -1,3 +1,4 @@
+import categoryChipClass from '../../utils/categoryChipClass'
 import EmptyStateCard from '../EmptyStateCard'
 import Skeleton from '../Skeleton'
 
@@ -80,9 +81,14 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
                     <td
                       className={`px-5 py-3 sm:px-6 ${rowIndex > 0 ? 'border-t border-rule-soft' : ''}`}
                     >
-                      <div>
-                        <p className="font-semibold text-ink">{expense.merchant}</p>
-                        <p className="copy-meta mt-0.5">{expense.reference}</p>
+                      <div className="flex items-center gap-3">
+                        <span className="monogram h-8 w-8 text-[11px]">
+                          {expense.merchant?.charAt(0) || '?'}
+                        </span>
+                        <div>
+                          <p className="font-semibold text-ink">{expense.merchant}</p>
+                          <p className="copy-meta mt-0.5">{expense.reference}</p>
+                        </div>
                       </div>
                     </td>
                     <td
@@ -98,7 +104,7 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
                     <td
                       className={`px-5 py-3 sm:px-6 ${rowIndex > 0 ? 'border-t border-rule-soft' : ''}`}
                     >
-                      <span className="badge bg-sunken text-ink-soft">
+                      <span className={categoryChipClass(expense.category)}>
                         {expense.category}
                       </span>
                     </td>

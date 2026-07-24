@@ -45,6 +45,19 @@ function Topbar() {
 
         {!isOnUploadPage && (
           <Link to="/upload-receipt" className="btn btn-primary">
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="h-3.5 w-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="square"
+            >
+              <path d="M12 16V5" />
+              <path d="m7 10 5-5 5 5" />
+              <path d="M5 19h14" />
+            </svg>
             Upload receipt
           </Link>
         )}

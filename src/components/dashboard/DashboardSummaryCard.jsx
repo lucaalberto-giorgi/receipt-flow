@@ -6,7 +6,7 @@ function DashboardSummaryCard({ index, title, value, caption }) {
         <span className="copy-meta">{index}</span>
       </div>
 
-      <p className="figure mt-4 text-[28px] font-bold tracking-tight text-ink">
+      <p className="figure mt-4 text-[30px] font-bold leading-none tracking-tight text-ink">
         {value}
       </p>
 

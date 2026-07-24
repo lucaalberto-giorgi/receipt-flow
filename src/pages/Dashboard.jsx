@@ -35,12 +35,13 @@ function Dashboard() {
     return counts
   }, {})
 
-  const topCategoryEntry =
-    Object.entries(categoryCounts).sort((left, right) => right[1] - left[1])[0] ??
-    null
+  const rankedCategories = Object.entries(categoryCounts).sort(
+    (left, right) => right[1] - left[1],
+  )
 
-  const topCategoryName = topCategoryEntry?.[0] ?? 'No category yet'
-  const topCategoryCount = topCategoryEntry?.[1] ?? 0
+  const topCategoryName = rankedCategories[0]?.[0] ?? 'No category yet'
+  const maxCategoryCount = rankedCategories[0]?.[1] ?? 0
+  const topCategories = rankedCategories.slice(0, 3)
   const recentExpenses = expenses.slice(0, 4)
   const hasExpenses = expenses.length > 0
 
@@ -107,22 +108,27 @@ function Dashboard() {
 
       <div className="reveal reveal-2 grid min-w-0 gap-4 sm:gap-5 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
         <section className="card p-5 sm:p-6">
-          <p className="eyebrow">Top category</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="eyebrow">Top category</p>
+            <span className="copy-meta">By entry count</span>
+          </div>
           {isLoading ? (
-            <div className="mt-4 space-y-4">
+            <div className="mt-3 space-y-4">
               <Skeleton className="h-7 w-40" />
               <div className="space-y-2">
                 <Skeleton className="h-4 w-full max-w-md" />
                 <Skeleton className="h-4 w-4/5 max-w-sm" />
               </div>
-              <div className="mt-5 border border-rule bg-sunken/60 p-4">
-                <div className="flex items-end justify-between gap-4">
-                  <div className="space-y-3">
-                    <Skeleton className="h-3 w-24" />
-                    <Skeleton className="h-8 w-12" />
+              <div className="space-y-4 border-t border-rule-soft pt-4">
+                {Array.from({ length: 3 }, (_, index) => (
+                  <div key={index}>
+                    <div className="flex items-baseline justify-between gap-4">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-4 w-8" />
+                    </div>
+                    <Skeleton className="mt-2 h-1.5 w-full" />
                   </div>
-                  <Skeleton className="h-5 w-28" />
-                </div>
+                ))}
               </div>
             </div>
           ) : hasExpenses ? (
@@ -135,19 +141,31 @@ function Dashboard() {
                 updating automatically as new receipts are posted.
               </p>
 
-              <div className="mt-5 border border-rule bg-sunken/60 p-4">
-                <div className="flex items-end justify-between gap-4">
-                  <div>
-                    <p className="copy-meta">Expense count</p>
-                    <p className="figure mt-1.5 text-3xl font-bold tracking-tight text-ink">
-                      {topCategoryCount}
-                    </p>
+              <div className="mt-5 space-y-4 border-t border-rule-soft pt-4">
+                {topCategories.map(([category, count], index) => (
+                  <div key={category}>
+                    <div className="flex items-baseline justify-between gap-4">
+                      <span
+                        className={`text-[13px] font-semibold ${
+                          index === 0 ? 'text-ink' : 'text-ink-soft'
+                        }`}
+                      >
+                        {category}
+                      </span>
+                      <span className="figure text-sm font-bold text-ink">
+                        {count}
+                      </span>
+                    </div>
+                    <div className="mt-1.5 h-1.5 w-full bg-sunken">
+                      <div
+                        className="h-full bg-accent transition-all"
+                        style={{
+                          width: `${maxCategoryCount > 0 ? (count / maxCategoryCount) * 100 : 0}%`,
+                        }}
+                      />
+                    </div>
                   </div>
-
-                  <span className="badge bg-accent-tint text-accent">
-                    Leading category
-                  </span>
-                </div>
+                ))}
               </div>
             </>
           ) : (

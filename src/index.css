@@ -13,7 +13,8 @@
 :root {
   color-scheme: light;
 
-  --paper: #eae1c6; /* manila desk, softened */
+  --paper: #ece4cd; /* manila desk, softened */
+  --paper-hi: #f3edde; /* desk highlight at the top of the page */
   --card: #fcfaf3; /* the form sheet */
   --sunken: #f1ebd9;
   --ink: #17140d;
@@ -32,12 +33,16 @@
   --carbon-blue: #d5e2f0;
 
   --press: #17140d;
+  --shadow-card:
+    0 1px 0 rgba(23, 20, 13, 0.04),
+    0 6px 18px -10px rgba(23, 20, 13, 0.14);
 }
 
 .dark {
   color-scheme: dark;
 
   --paper: #141120; /* carbon-paper purple-black */
+  --paper-hi: #1a1629;
   --card: #1d1930;
   --sunken: #262141;
   --ink: #d9d3f0;
@@ -56,6 +61,9 @@
   --carbon-blue: rgba(207, 224, 240, 0.14);
 
   --press: #060410;
+  --shadow-card:
+    0 1px 0 rgba(0, 0, 0, 0.2),
+    0 6px 18px -10px rgba(0, 0, 0, 0.5);
 }
 
 @theme inline {
@@ -92,7 +100,9 @@
 
 body {
   min-height: 100vh;
-  background: var(--paper);
+  background-color: var(--paper);
+  background-image: linear-gradient(180deg, var(--paper-hi), var(--paper) 420px);
+  background-repeat: no-repeat;
 }
 
 #root {
@@ -150,7 +160,7 @@ body {
   background: var(--card);
   border: 1px solid var(--rule);
   border-radius: 0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-card);
 }
 
 /* Black title bar — reserved for brand and ceremony (sidebar, modals). */
@@ -192,7 +202,22 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.2rem 0.5rem;
+  border: 1px solid color-mix(in oklab, currentColor 25%, transparent);
   white-space: nowrap;
+}
+
+/* Merchant monogram — a small stamped initial block. */
+.monogram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--sunken);
+  border: 1px solid var(--rule-soft);
+  color: var(--ink-soft);
 }
 
 /* One ceremonial rubber stamp allowed on screen (the demo mark). */
@@ -318,6 +343,10 @@ body {
 .field::placeholder {
   color: var(--ink-faint);
   font-style: italic;
+}
+
+.field:hover:not(:disabled):not(:focus) {
+  border-color: var(--ink-faint);
 }
 
 .field:focus {

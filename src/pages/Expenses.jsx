@@ -128,7 +128,7 @@ function Expenses() {
                     <p className="eyebrow">Total Spend</p>
                     <span className="copy-meta">01</span>
                   </div>
-                  <p className="figure mt-4 text-[28px] font-bold tracking-tight text-ink">
+                  <p className="figure mt-4 text-[30px] font-bold leading-none tracking-tight text-ink">
                     {formatCurrency(totalSpend)}
                   </p>
                   <div className="tear mt-4" />
@@ -140,7 +140,7 @@ function Expenses() {
                     <p className="eyebrow">Volume</p>
                     <span className="copy-meta">02</span>
                   </div>
-                  <p className="figure mt-4 text-[28px] font-bold tracking-tight text-ink">
+                  <p className="figure mt-4 text-[30px] font-bold leading-none tracking-tight text-ink">
                     {expenses.length}
                   </p>
                   <div className="tear mt-4" />
@@ -152,7 +152,7 @@ function Expenses() {
                     <p className="eyebrow">Top Category</p>
                     <span className="copy-meta">03</span>
                   </div>
-                  <p className="figure mt-4 truncate text-[28px] font-bold tracking-tight text-ink">
+                  <p className="figure mt-4 truncate text-[30px] font-bold leading-none tracking-tight text-ink">
                     {topCategory}
                   </p>
                   <div className="tear mt-4" />
@@ -200,8 +200,13 @@ function Expenses() {
                     <span className="text-[13px] font-semibold text-ink">
                       {category}
                     </span>
-                    <span className="figure text-sm font-bold text-ink">
-                      {formatCurrency(amount)}
+                    <span className="flex items-baseline gap-2">
+                      <span className="figure text-sm font-bold text-ink">
+                        {formatCurrency(amount)}
+                      </span>
+                      <span className="copy-meta w-9 text-right">
+                        {totalSpend > 0 ? Math.round((amount / totalSpend) * 100) : 0}%
+                      </span>
                     </span>
                   </div>
 
