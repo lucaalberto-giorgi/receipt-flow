@@ -1,8 +1,8 @@
-function Skeleton({ className = '', rounded = 'rounded-xl' }) {
+function Skeleton({ className = '', rounded = 'rounded-md' }) {
   return (
     <div
       aria-hidden="true"
-      className={`animate-pulse bg-slate-200/80 dark:bg-slate-700/70 ${rounded} ${className}`}
+      className={`animate-pulse bg-sunken ${rounded} ${className}`}
     />
   )
 }

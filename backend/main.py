@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 import re
@@ -142,6 +143,72 @@ def extract_with_ai(extracted_text: str) -> dict | None:
         "items": normalized_items,
     }
 
+IMAGE_MIME_BY_EXTENSION = {
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".webp": "image/webp",
+}
+
+
+def transcribe_image_with_ai(file_bytes: bytes, content_type: str | None, filename: str) -> str:
+    """Read the text off a receipt photo with the vision model."""
+    if client is None:
+        return ""
+
+    mime_type = content_type if content_type in ALLOWED_CONTENT_TYPES else None
+    if mime_type is None:
+        for extension, extension_mime in IMAGE_MIME_BY_EXTENSION.items():
+            if filename.endswith(extension):
+                mime_type = extension_mime
+                break
+
+    if mime_type is None:
+        return ""
+
+    encoded_image = base64.b64encode(file_bytes).decode("ascii")
+
+    try:
+        response = client.responses.create(
+            model=OPENAI_MODEL,
+            input=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "input_text",
+                            "text": (
+                                "Transcribe every line of text on this receipt "
+                                "exactly as printed. Return plain text only."
+                            ),
+                        },
+                        {
+                            "type": "input_image",
+                            "image_url": f"data:{mime_type};base64,{encoded_image}",
+                        },
+                    ],
+                }
+            ],
+        )
+        return response.output_text.strip()
+    except Exception:
+        return ""
+
+
+def transcribe_image_with_ocr(file_bytes: bytes) -> str:
+    """Local OCR fallback for image uploads when no AI client is configured."""
+    if pytesseract is None:
+        return ""
+
+    try:
+        from PIL import Image
+
+        image = Image.open(BytesIO(file_bytes))
+        return (pytesseract.image_to_string(image) or "").strip()
+    except Exception:
+        return ""
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
@@ -199,7 +266,10 @@ async def extract_receipt(file: UploadFile | None = File(None)):
                     text for text in page_texts if text
                 ).strip()
     else:
-        extracted_text = "TODO: Add OCR for image uploads."
+        extracted_text = transcribe_image_with_ai(file_bytes, content_type, filename)
+
+        if not extracted_text:
+            extracted_text = transcribe_image_with_ocr(file_bytes)
 
     merchant = "Tesco"
     merchant_source = " ".join(extracted_text.split())

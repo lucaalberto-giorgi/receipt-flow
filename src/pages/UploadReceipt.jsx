@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ExtractedExpenseForm from '../components/upload-receipt/ExtractedExpenseForm'
 import ReceiptUploader from '../components/upload-receipt/ReceiptUploader'
-import { useExpenses } from '../context/ExpensesContext'
+import { useExpenses } from '../context/useExpenses'
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -14,6 +14,8 @@ const EMPTY_FORM = {
   notes: '',
 }
 
+const COLD_START_HINT_DELAY_MS = 6000
+
 function UploadReceipt() {
   const navigate = useNavigate()
   const { addExpense } = useExpenses()
@@ -23,6 +25,7 @@ function UploadReceipt() {
   const [isDragOver, setIsDragOver] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState('')
+  const [showColdStartHint, setShowColdStartHint] = useState(false)
   const [formData, setFormData] = useState(EMPTY_FORM)
 
   useEffect(() => {
@@ -37,8 +40,24 @@ function UploadReceipt() {
     return () => URL.revokeObjectURL(objectUrl)
   }, [selectedFile])
 
+  // The free-tier backend sleeps between visits; surface a note when the
+  // first extraction is taking noticeably long.
+  useEffect(() => {
+    if (!isUploading) {
+      setShowColdStartHint(false)
+      return undefined
+    }
+
+    const timeoutId = setTimeout(
+      () => setShowColdStartHint(true),
+      COLD_START_HINT_DELAY_MS,
+    )
+
+    return () => clearTimeout(timeoutId)
+  }, [isUploading])
+
+  // A file is optional — expenses can also be entered manually.
   const canSaveExpense =
-    Boolean(selectedFile) &&
     formData.merchant.trim() &&
     formData.amount &&
     formData.date &&
@@ -80,7 +99,7 @@ function UploadReceipt() {
     }
   }
 
-  async function applyMockExtraction(file) {
+  async function requestExtraction(file) {
     setSelectedFile(file)
     setUploadError('')
     setIsUploading(true)
@@ -122,7 +141,7 @@ function UploadReceipt() {
       return
     }
 
-    await applyMockExtraction(file)
+    await requestExtraction(file)
   }
 
   function handleInputChange(event) {
@@ -185,35 +204,42 @@ function UploadReceipt() {
   }
 
   return (
-    <section className="min-w-0 space-y-5 sm:space-y-6">
-      <div className="flex flex-col gap-2 border-b border-violet-100/80 pb-4 dark:border-slate-700 sm:gap-3 sm:pb-5 sm:flex-row sm:items-end sm:justify-between">
+    <section className="min-w-0 space-y-6 sm:space-y-7">
+      <div className="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-            Receipt Intake
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+          <p className="eyebrow">Receipt Intake</p>
+          <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Upload Receipt
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
-            Drop in a receipt and review extracted details before saving it as
-            an expense.
+          <p className="mt-2 max-w-2xl text-sm text-ink-soft">
+            Drop in a receipt for AI extraction, or type the entry in by hand —
+            review the details before posting to the ledger.
           </p>
         </div>
 
-        <div className="rounded-xl border border-violet-100 bg-violet-50/80 px-3 py-2.5 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 sm:rounded-2xl sm:px-4 sm:py-3">
+        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint">
           {isUploading
-            ? 'Extracting receipt...'
+            ? 'Extracting receipt…'
             : selectedFile
               ? 'Receipt parsed'
               : 'Waiting for upload'}
-        </div>
+        </span>
       </div>
 
       {uploadError ? (
-        <p className="text-sm text-rose-600">{uploadError}</p>
+        <p className="font-mono text-xs uppercase tracking-[0.1em] text-red-ink">
+          {uploadError}
+        </p>
       ) : null}
 
-      <div className="grid min-w-0 gap-5 sm:gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)]">
+      {showColdStartHint && isUploading ? (
+        <p className="font-mono text-xs tracking-[0.04em] text-amber-ink">
+          The free-tier server naps between visits — the first extraction can
+          take up to a minute while it wakes up.
+        </p>
+      ) : null}
+
+      <div className="reveal reveal-1 grid min-w-0 gap-5 sm:gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)]">
         <ReceiptUploader
           inputRef={inputRef}
           isDragOver={isDragOver}

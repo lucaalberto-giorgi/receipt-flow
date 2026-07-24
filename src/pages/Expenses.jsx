@@ -2,7 +2,7 @@ import { useState } from 'react'
 import ExpensesFilters from '../components/expenses/ExpensesFilters'
 import ExpensesTable from '../components/expenses/ExpensesTable'
 import Skeleton from '../components/Skeleton'
-import { useExpenses } from '../context/ExpensesContext'
+import { useExpenses } from '../context/useExpenses'
 import exportExpensesCsv from '../utils/exportExpensesCsv'
 
 function parseAmount(amount) {
@@ -39,7 +39,7 @@ function Expenses() {
   const maxCategoryAmount = categoryBreakdown[0]?.[1] ?? 0
   const topCategory =
     expenses.length === 0
-      ? '-'
+      ? '—'
       : categoryBreakdown[0]?.[0] || 'Other'
 
   const filteredExpenses = expenses.filter((expense) => {
@@ -81,17 +81,15 @@ function Expenses() {
 
   return (
     <>
-      <section className="min-w-0 space-y-5 sm:space-y-6">
-        <div className="flex flex-col gap-2 border-b border-violet-100/80 pb-4 dark:border-slate-700 sm:gap-3 sm:pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <section className="min-w-0 space-y-6 sm:space-y-7">
+        <div className="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-              Expense Ledger
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+            <p className="eyebrow">Expense Ledger</p>
+            <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
               Expenses
             </h2>
-            <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
-              Review submitted receipts, scan the latest activity, and narrow the
+            <p className="mt-2 max-w-2xl text-sm text-ink-soft">
+              Review posted receipts, scan the latest activity, and narrow the
               list with quick filters.
             </p>
           </div>
@@ -101,99 +99,76 @@ function Expenses() {
               type="button"
               onClick={handleExportCsv}
               disabled={isLoading}
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+              className="btn btn-ghost"
             >
               Export CSV
             </button>
 
-            <div className="rounded-xl border border-violet-100 bg-violet-50/80 px-3 py-2.5 text-sm text-slate-600 shadow-[0_14px_28px_-24px_rgba(76,29,149,0.45)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 sm:rounded-2xl sm:px-4 sm:py-3">
-              {filteredExpenses.length} expense{filteredExpenses.length === 1 ? '' : 's'}
-            </div>
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint sm:text-right">
+              {filteredExpenses.length} entr{filteredExpenses.length === 1 ? 'y' : 'ies'}
+            </span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+        <div className="reveal reveal-1 grid grid-cols-1 gap-4 pb-2 sm:grid-cols-2 lg:grid-cols-3">
           {isLoading
             ? Array.from({ length: 3 }, (_, index) => (
-                <article
-                  key={index}
-                  className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6"
-                >
+                <article key={index} className="card p-5 sm:p-6">
                   <Skeleton className="h-3 w-16" rounded="rounded-full" />
-                  <Skeleton className="mt-3 h-4 w-28" />
-                  <Skeleton className="mt-6 h-10 w-24" />
-                  <Skeleton className="mt-4 h-4 w-40" />
+                  <Skeleton className="mt-6 h-9 w-28" />
+                  <Skeleton className="mt-4 h-3 w-36" />
                 </article>
               ))
             : (
               <>
-                <article className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
-                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-                    Summary
-                  </p>
-                  <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-                    Total Spend
-                  </h3>
-                  <p className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+                <article className="receipt-stub p-5 pb-6 sm:p-6 sm:pb-7">
+                  <p className="eyebrow">Total Spend</p>
+                  <p className="figure mt-5 text-3xl font-semibold tracking-tight text-ink sm:mt-6 sm:text-[34px]">
                     {formatCurrency(totalSpend)}
                   </p>
-                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                  <div className="tear mt-4" />
+                  <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
                     Across all saved expenses
                   </p>
                 </article>
 
-                <article className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
-                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-                    Volume
-                  </p>
-                  <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-                    Total Expenses
-                  </h3>
-                  <p className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+                <article className="receipt-stub p-5 pb-6 sm:p-6 sm:pb-7">
+                  <p className="eyebrow">Volume</p>
+                  <p className="figure mt-5 text-3xl font-semibold tracking-tight text-ink sm:mt-6 sm:text-[34px]">
                     {expenses.length}
                   </p>
-                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                    Items currently in shared state
+                  <div className="tear mt-4" />
+                  <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
+                    Entries in the ledger
                   </p>
                 </article>
 
-                <article className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
-                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-                    Leader
-                  </p>
-                  <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-                    Top Category
-                  </h3>
-                  <p className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+                <article className="receipt-stub p-5 pb-6 sm:p-6 sm:pb-7">
+                  <p className="eyebrow">Top Category</p>
+                  <p className="figure mt-5 truncate text-3xl font-semibold tracking-tight text-ink sm:mt-6 sm:text-[34px]">
                     {topCategory}
                   </p>
-                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                    Highest spend category right now
+                  <div className="tear mt-4" />
+                  <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
+                    Highest spend right now
                   </p>
                 </article>
               </>
             )}
         </div>
 
-        <section className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
-          <div className="flex flex-col gap-2 border-b border-violet-100/80 pb-3 dark:border-slate-700 sm:gap-3 sm:pb-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-                Breakdown
-              </p>
-              <h3 className="mt-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-xl">
-                Spending by Category
-              </h3>
-            </div>
+        <section className="reveal reveal-2 card p-5 sm:p-6">
+          <div className="border-b border-dashed border-rule pb-4">
+            <p className="eyebrow">Breakdown</p>
+            <h3 className="font-display mt-2 text-lg font-semibold tracking-tight text-ink sm:text-xl">
+              Spending by Category
+            </h3>
           </div>
 
           {isLoading ? (
-            <div className="mt-3 space-y-3 px-0.5 sm:mt-4 sm:space-y-4 sm:px-1">
+            <div className="mt-4 space-y-4">
               {Array.from({ length: 4 }, (_, index) => (
-                <div
-                  key={index}
-                  className="rounded-xl border border-violet-100/80 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-800/50 sm:px-4 sm:py-3"
-                >
+                <div key={index} className="border-b border-rule-soft pb-4">
                   <div className="flex items-baseline justify-between gap-4">
                     <Skeleton className="h-4 w-28" />
                     <Skeleton className="h-4 w-16" />
@@ -203,28 +178,23 @@ function Expenses() {
               ))}
             </div>
           ) : categoryBreakdown.length === 0 ? (
-            <p className="py-8 text-sm text-slate-500 dark:text-slate-400">
-              No expense data yet.
-            </p>
+            <p className="py-8 text-sm text-ink-soft">No expense data yet.</p>
           ) : (
-            <div className="mt-3 space-y-3 px-0.5 sm:mt-4 sm:space-y-4 sm:px-1">
+            <div className="mt-4 space-y-4">
               {categoryBreakdown.map(([category, amount]) => (
-                <div
-                  key={category}
-                  className="rounded-xl border border-violet-100/80 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-800/50 sm:px-4 sm:py-3"
-                >
+                <div key={category} className="border-b border-rule-soft pb-4 last:border-b-0 last:pb-0">
                   <div className="flex items-baseline justify-between gap-4 text-sm">
-                    <span className="font-medium text-slate-900 dark:text-slate-100">
+                    <span className="font-mono text-[12px] font-medium uppercase tracking-[0.1em] text-ink">
                       {category}
                     </span>
-                    <span className="font-semibold text-slate-600 dark:text-slate-300">
+                    <span className="figure font-semibold text-ink">
                       {formatCurrency(amount)}
                     </span>
                   </div>
 
-                  <div className="mt-2 h-1.5 w-full rounded-full bg-slate-200 dark:bg-slate-700">
+                  <div className="mt-2.5 h-1.5 w-full rounded-full bg-sunken">
                     <div
-                      className="h-1.5 rounded-full bg-violet-600 transition-all"
+                      className="h-1.5 rounded-full bg-accent-solid transition-all"
                       style={{
                         width: `${maxCategoryAmount > 0 ? (amount / maxCategoryAmount) * 100 : 0}%`,
                       }}
@@ -236,46 +206,49 @@ function Expenses() {
           )}
         </section>
 
-        <ExpensesFilters
-          categories={categories}
-          searchTerm={searchTerm}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          onSearchChange={setSearchTerm}
-        />
+        <div className="reveal reveal-3 space-y-6 sm:space-y-7">
+          <ExpensesFilters
+            categories={categories}
+            searchTerm={searchTerm}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            onSearchChange={setSearchTerm}
+          />
 
-        <ExpensesTable
-          isLoading={isLoading}
-          expenses={filteredExpenses}
-          hasExpenses={expenses.length > 0}
-          onDeleteExpense={handleDeleteExpense}
-        />
+          <ExpensesTable
+            isLoading={isLoading}
+            expenses={filteredExpenses}
+            hasExpenses={expenses.length > 0}
+            onDeleteExpense={handleDeleteExpense}
+          />
+        </div>
       </section>
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg dark:bg-slate-900">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Delete expense?
+          <div className="card w-full max-w-md p-6">
+            <p className="eyebrow text-red-ink">Void Entry</p>
+            <h3 className="font-display mt-2 text-lg font-semibold text-ink">
+              Void this expense?
             </h3>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              This action cannot be undone.
+            <p className="mt-2 text-sm text-ink-soft">
+              It will be struck from the ledger. This action cannot be undone.
             </p>
 
             <div className="mt-6 flex justify-end gap-3">
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="rounded-xl border border-slate-300 px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                className="btn btn-ghost"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700"
+                className="btn btn-void"
               >
-                Delete
+                Void entry
               </button>
             </div>
           </div>

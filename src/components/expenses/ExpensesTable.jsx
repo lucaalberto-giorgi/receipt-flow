@@ -1,30 +1,19 @@
 import EmptyStateCard from '../EmptyStateCard'
 import Skeleton from '../Skeleton'
 
-function StatusBadge({ status }) {
-  const styles =
-    status === 'Reviewed'
-      ? 'border border-emerald-100 bg-emerald-50 text-emerald-700'
-      : 'border border-amber-100 bg-amber-50 text-amber-700'
+function StatusStamp({ status }) {
+  const color = status === 'Reviewed' ? 'text-accent' : 'text-amber-ink'
 
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold tracking-[0.18em] uppercase ${styles}`}
-    >
-      {status}
-    </span>
-  )
+  return <span className={`stamp ${color}`}>{status}</span>
 }
 
 function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpense }) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-violet-100/80 bg-white shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px]">
-      <div className="flex items-center justify-between border-b border-violet-100/80 px-4 py-3 dark:border-slate-700 sm:px-6 sm:py-4">
+    <section className="card overflow-hidden">
+      <div className="flex items-center justify-between border-b border-dashed border-rule px-5 py-4 sm:px-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-            Expense Table
-          </p>
-          <h3 className="mt-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-xl">
+          <p className="eyebrow">Expense Ledger</p>
+          <h3 className="font-display mt-2 text-lg font-semibold tracking-tight text-ink sm:text-xl">
             Recent expenses
           </h3>
         </div>
@@ -32,12 +21,12 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
 
       <div className="overflow-x-auto">
         {isLoading ? (
-          <div className="p-4 sm:p-6">
+          <div className="p-5 sm:p-6">
             <div className="min-w-[720px] space-y-4">
               {Array.from({ length: 6 }, (_, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-[1.6fr_1fr_1fr_1fr_1fr_0.9fr] gap-4 rounded-2xl border border-violet-100/70 px-4 py-4 dark:border-slate-700"
+                  className="grid grid-cols-[1.6fr_1fr_1fr_1fr_1fr_0.9fr] gap-4 border-b border-rule-soft px-2 pb-4"
                 >
                   <div className="space-y-2">
                     <Skeleton className="h-4 w-32" />
@@ -45,9 +34,9 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
                   </div>
                   <Skeleton className="h-4 w-20 self-center" />
                   <Skeleton className="h-4 w-16 self-center" />
-                  <Skeleton className="h-7 w-20 self-center" rounded="rounded-full" />
-                  <Skeleton className="h-7 w-24 self-center" rounded="rounded-full" />
-                  <Skeleton className="h-8 w-20 self-center" rounded="rounded-xl" />
+                  <Skeleton className="h-5 w-20 self-center" rounded="rounded-[3px]" />
+                  <Skeleton className="h-6 w-24 self-center" rounded="rounded-[4px]" />
+                  <Skeleton className="h-8 w-16 self-center" rounded="rounded-md" />
                 </div>
               ))}
             </div>
@@ -56,23 +45,23 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
           <>
             <table className="min-w-[720px] border-separate border-spacing-0 sm:min-w-full">
               <thead>
-                <tr className="bg-violet-50/70 text-left dark:bg-slate-800/80">
-                  <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400 sm:px-6 sm:py-4">
+                <tr className="bg-sunken text-left">
+                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
                     Merchant
                   </th>
-                  <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400 sm:px-6 sm:py-4">
+                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
                     Date
                   </th>
-                  <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400 sm:px-6 sm:py-4">
+                  <th className="px-5 py-3 text-right font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
                     Amount
                   </th>
-                  <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400 sm:px-6 sm:py-4">
+                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
                     Category
                   </th>
-                  <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400 sm:px-6 sm:py-4">
+                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400 sm:px-6 sm:py-4">
+                  <th className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:px-6">
                     Action
                   </th>
                 </tr>
@@ -81,36 +70,37 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
                 {expenses.map((expense) => (
                   <tr
                     key={expense.id}
-                    className="border-t border-violet-100/70 text-sm text-slate-600 transition hover:bg-violet-50/40 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800"
+                    className="text-sm text-ink-soft transition hover:bg-sunken/50"
                   >
-                    <td className="px-4 py-3 sm:px-6 sm:py-4">
+                    <td className="border-t border-rule-soft px-5 py-3.5 sm:px-6">
                       <div>
-                        <p className="font-medium text-slate-900 dark:text-slate-100">{expense.merchant}</p>
-                        <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                        <p className="font-medium text-ink">{expense.merchant}</p>
+                        <p className="figure mt-1 text-[10px] uppercase tracking-[0.14em] text-ink-faint">
                           {expense.reference}
                         </p>
                       </div>
                     </td>
-                    <td className="px-4 py-3 sm:px-6 sm:py-4">{expense.date}</td>
-                    <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100 sm:px-6 sm:py-4">
+                    <td className="figure border-t border-rule-soft px-5 py-3.5 text-[13px] sm:px-6">
+                      {expense.date}
+                    </td>
+                    <td className="figure border-t border-rule-soft px-5 py-3.5 text-right font-semibold text-ink sm:px-6">
                       {expense.amount}
                     </td>
-                    <td className="px-4 py-3 sm:px-6 sm:py-4">
-                      <span className="inline-flex rounded-full border border-violet-100 bg-violet-50 px-3 py-1 text-xs font-medium text-violet-700 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300">
+                    <td className="border-t border-rule-soft px-5 py-3.5 sm:px-6">
+                      <span className="rounded-[3px] border border-rule bg-sunken px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-soft">
                         {expense.category}
                       </span>
                     </td>
-                    <td className="px-4 py-3 sm:px-6 sm:py-4">
-                      <StatusBadge status={expense.status} />
+                    <td className="border-t border-rule-soft px-5 py-3.5 sm:px-6">
+                      <StatusStamp status={expense.status} />
                     </td>
-                    <td className="px-4 py-3 sm:px-6 sm:py-4">
+                    <td className="border-t border-rule-soft px-5 py-3.5 sm:px-6">
                       <button
                         type="button"
                         onClick={() => onDeleteExpense(expense.id)}
-                        className="inline-flex min-h-10 items-center gap-1 whitespace-nowrap rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
+                        className="inline-flex min-h-9 items-center rounded-md border border-red-ink/50 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-red-ink transition hover:bg-red-tint"
                       >
-                        <span aria-hidden="true">🗑</span>
-                        Delete
+                        Void
                       </button>
                     </td>
                   </tr>
@@ -119,19 +109,19 @@ function ExpensesTable({ expenses, hasExpenses, isLoading = false, onDeleteExpen
             </table>
 
             {expenses.length === 0 && (
-          <div className="px-4 py-6 sm:px-6 sm:py-8">
-            <EmptyStateCard
-              eyebrow={hasExpenses ? 'No Results' : 'Getting Started'}
-              title={hasExpenses ? 'No matching expenses' : 'No expenses yet'}
-              description={
-                hasExpenses
-                  ? 'Try a different search term or clear the category filter.'
-                  : 'Upload a receipt or add an expense manually to get started.'
-              }
-              actionLabel={hasExpenses ? undefined : 'Upload Receipt'}
-              actionTo={hasExpenses ? undefined : '/upload-receipt'}
-            />
-          </div>
+              <div className="px-5 py-6 sm:px-6 sm:py-8">
+                <EmptyStateCard
+                  eyebrow={hasExpenses ? 'No Results' : 'Getting Started'}
+                  title={hasExpenses ? 'No matching expenses' : 'No expenses yet'}
+                  description={
+                    hasExpenses
+                      ? 'Try a different search term or clear the category filter.'
+                      : 'Upload a receipt or add an expense manually to get started.'
+                  }
+                  actionLabel={hasExpenses ? undefined : 'Upload Receipt'}
+                  actionTo={hasExpenses ? undefined : '/upload-receipt'}
+                />
+              </div>
             )}
           </>
         )}

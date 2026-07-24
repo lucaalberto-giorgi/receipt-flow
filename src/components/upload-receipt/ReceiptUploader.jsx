@@ -25,17 +25,15 @@ function ReceiptUploader({
   const isImagePreview = Boolean(previewUrl)
 
   return (
-    <article className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.18)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
-      <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <article className="card min-w-0 p-5 sm:p-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-            Left Panel
-          </p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+          <p className="eyebrow">Source Document</p>
+          <h3 className="font-display mt-2 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
             Receipt File
           </h3>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Upload receipt image or PDF
+          <p className="mt-2 text-sm text-ink-soft">
+            Upload a receipt image or PDF for extraction.
           </p>
         </div>
 
@@ -43,14 +41,10 @@ function ReceiptUploader({
           type="button"
           disabled={isUploading}
           onClick={onBrowseClick}
-          className={`inline-flex min-h-11 items-center justify-center rounded-2xl border px-4 py-2 text-sm font-medium transition sm:w-auto ${
-            isUploading
-              ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500'
-              : 'border-slate-200 bg-slate-50 text-violet-700 hover:border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300 dark:hover:border-slate-600 dark:hover:bg-slate-800'
-          }`}
+          className="btn btn-ghost"
         >
           {isUploading
-            ? 'Extracting...'
+            ? 'Extracting…'
             : selectedFile
               ? 'Replace file'
               : 'Choose file'}
@@ -61,10 +55,10 @@ function ReceiptUploader({
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
-        className={`mt-5 overflow-hidden rounded-2xl border border-dashed p-3 transition sm:mt-6 sm:rounded-[28px] sm:p-5 ${
+        className={`mt-5 overflow-hidden rounded-[10px] border-[1.5px] border-dashed p-3 transition sm:mt-6 sm:p-4 ${
           isDragOver
-            ? 'border-slate-400 bg-slate-50 dark:border-slate-500 dark:bg-slate-800'
-            : 'border-slate-300 bg-slate-50 hover:border-slate-400 dark:border-slate-600 dark:bg-slate-800 hover:dark:border-slate-500'
+            ? 'border-accent bg-accent-tint'
+            : 'border-rule bg-sunken/60 hover:border-ink-faint'
         } ${isUploading ? 'pointer-events-none opacity-75' : ''}`}
       >
         <input
@@ -76,17 +70,28 @@ function ReceiptUploader({
         />
 
         {!selectedFile && (
-          <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-white/70 bg-white/55 px-4 text-center dark:border-slate-700 dark:bg-slate-900/40 sm:min-h-[440px] sm:rounded-[24px] sm:px-6">
-            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-violet-600 text-lg font-semibold text-white shadow-[0_18px_32px_-20px_rgba(124,58,237,0.85)]">
-              +
+          <div className="flex min-h-[320px] flex-col items-center justify-center rounded-md px-4 text-center sm:min-h-[440px] sm:px-6">
+            <div className="flex h-14 w-14 items-center justify-center rounded-md bg-accent-solid text-on-accent">
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 16V5" />
+                <path d="m7 10 5-5 5 5" />
+                <path d="M5 19h14" />
+              </svg>
             </div>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.28em] text-violet-500">
-              Receipt Upload
-            </p>
-            <h4 className="mt-6 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
+            <p className="eyebrow mt-6">Drop Receipt Here</p>
+            <h4 className="font-display mt-4 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
               Drag and drop your receipt
             </h4>
-            <p className="mt-3 max-w-sm text-sm leading-6 text-slate-500 dark:text-slate-400">
+            <p className="mt-3 max-w-sm text-sm leading-6 text-ink-soft">
               Drop a JPG, PNG, or PDF here, or use the button above to browse
               for a file.
             </p>
@@ -94,8 +99,8 @@ function ReceiptUploader({
         )}
 
         {selectedFile && isImagePreview && (
-          <div className="space-y-4">
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_40px_-30px_rgba(15,23,42,0.18)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[24px]">
+          <div className="space-y-3">
+            <div className="overflow-hidden rounded-md border border-rule bg-card">
               <img
                 src={previewUrl}
                 alt="Receipt preview"
@@ -103,26 +108,30 @@ function ReceiptUploader({
               />
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 sm:gap-3 sm:rounded-[24px] sm:px-4 sm:py-3">
-              <span className="max-w-full break-all font-medium text-slate-900 dark:text-slate-100">{selectedFile.name}</span>
-              <span>{isUploading ? 'Extracting receipt...' : formatFileSize(selectedFile.size)}</span>
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-rule bg-card px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
+              <span className="figure max-w-full break-all text-xs font-medium text-ink">
+                {selectedFile.name}
+              </span>
+              <span className="figure text-xs text-ink-soft">
+                {isUploading ? 'Extracting receipt…' : formatFileSize(selectedFile.size)}
+              </span>
             </div>
           </div>
         )}
 
         {selectedFile && !isImagePreview && (
-          <div className="flex min-h-[320px] items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.18)] dark:border-slate-700 dark:bg-slate-800 sm:min-h-[440px] sm:rounded-[24px] sm:p-6">
+          <div className="flex min-h-[320px] items-center justify-center rounded-md p-4 sm:min-h-[440px] sm:p-6">
             <div className="max-w-sm text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[28px] bg-violet-600 text-base font-semibold text-white shadow-[0_20px_34px_-18px_rgba(124,58,237,0.8)]">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-md bg-accent-solid font-mono text-sm font-semibold tracking-[0.1em] text-on-accent">
                 PDF
               </div>
-              <h4 className="mt-6 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
+              <h4 className="font-display mt-6 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
                 File ready for review
               </h4>
-              <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
+              <p className="figure mt-3 break-all text-sm leading-6 text-ink-soft">
                 {selectedFile.name}
               </p>
-              <p className="mt-2 text-xs font-medium uppercase tracking-[0.24em] text-violet-500">
+              <p className="mt-2 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-accent">
                 {formatFileSize(selectedFile.size)}
               </p>
             </div>

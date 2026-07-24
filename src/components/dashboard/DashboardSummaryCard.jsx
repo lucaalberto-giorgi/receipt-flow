@@ -1,55 +1,22 @@
-const accentStyles = {
-  violet: {
-    badge:
-      'border-violet-200 bg-violet-50 text-violet-700',
-    icon: 'bg-violet-600 text-white shadow-[0_18px_30px_-18px_rgba(124,58,237,0.8)]',
-  },
-  indigo: {
-    badge:
-      'border-indigo-200 bg-indigo-50 text-indigo-700',
-    icon: 'bg-indigo-600 text-white shadow-[0_18px_30px_-18px_rgba(79,70,229,0.8)]',
-  },
-  emerald: {
-    badge:
-      'border-emerald-200 bg-emerald-50 text-emerald-700',
-    icon: 'bg-emerald-600 text-white shadow-[0_18px_30px_-18px_rgba(5,150,105,0.8)]',
-  },
-  amber: {
-    badge:
-      'border-amber-200 bg-amber-50 text-amber-700',
-    icon: 'bg-amber-500 text-white shadow-[0_18px_30px_-18px_rgba(245,158,11,0.8)]',
-  },
-}
-
-function DashboardSummaryCard({ accent = 'violet', eyebrow, title, value }) {
-  const styles = accentStyles[accent] ?? accentStyles.violet
-
+function DashboardSummaryCard({ index, title, value, caption }) {
   return (
-    <article className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-            {eyebrow}
-          </p>
-          <h3 className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">{title}</h3>
-        </div>
-
-        <div
-          className={`flex h-11 w-11 items-center justify-center rounded-xl text-sm font-semibold ${styles.icon} sm:h-12 sm:w-12 sm:rounded-2xl`}
-        >
-          {title.charAt(0)}
-        </div>
+    <article className="receipt-stub p-5 pb-6 sm:p-6 sm:pb-7">
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="eyebrow">{title}</p>
+        <span className="font-mono text-[11px] tracking-[0.1em] text-ink-faint">
+          {index}
+        </span>
       </div>
 
-      <p className="mt-6 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:mt-8 sm:text-4xl">
+      <p className="figure mt-5 text-3xl font-semibold tracking-tight text-ink sm:mt-6 sm:text-[34px]">
         {value}
       </p>
 
-      <span
-        className={`mt-4 inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] sm:mt-5 ${styles.badge}`}
-      >
-        Shared state
-      </span>
+      <div className="tear mt-4" />
+
+      <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
+        {caption}
+      </p>
     </article>
   )
 }

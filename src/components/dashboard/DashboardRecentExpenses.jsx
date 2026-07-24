@@ -1,91 +1,82 @@
 import EmptyStateCard from '../EmptyStateCard'
 import Skeleton from '../Skeleton'
 
-function StatusBadge({ status }) {
-  const styles =
-    status === 'Reviewed'
-      ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
-      : 'border-amber-100 bg-amber-50 text-amber-700'
+function StatusStamp({ status }) {
+  const color = status === 'Reviewed' ? 'text-accent' : 'text-amber-ink'
 
-  return (
-    <span
-      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${styles}`}
-    >
-      {status}
-    </span>
-  )
+  return <span className={`stamp ${color}`}>{status}</span>
 }
 
 function DashboardRecentExpenses({ expenses, isLoading = false }) {
   return (
-    <section className="rounded-2xl border border-violet-100/80 bg-white p-4 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[28px] sm:p-6">
-      <div className="flex flex-col gap-2 border-b border-violet-100/80 pb-4 dark:border-slate-700 sm:gap-3 sm:pb-5 sm:flex-row sm:items-center sm:justify-between">
+    <section className="card p-5 sm:p-6">
+      <div className="flex flex-col gap-2 border-b border-dashed border-rule pb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pb-5">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-500">
-            Recent Expenses
-          </p>
-          <h3 className="mt-2 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
+          <p className="eyebrow">Recent Expenses</p>
+          <h3 className="font-display mt-2 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
             Latest activity
           </h3>
         </div>
 
-        <span className="w-fit rounded-xl border border-violet-100 bg-violet-50 px-3 py-1.5 text-sm text-violet-700 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300 sm:rounded-2xl sm:py-2">
+        <span className="w-fit font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint">
           {expenses.length} shown
         </span>
       </div>
 
-      <div className="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
+      <div className="mt-1 divide-y divide-rule-soft">
         {isLoading
           ? Array.from({ length: 4 }, (_, index) => (
               <article
                 key={index}
-                className="flex flex-col gap-3 rounded-2xl border border-violet-100/80 bg-violet-50/35 p-3 dark:border-slate-700 dark:bg-slate-800 sm:gap-4 sm:rounded-[24px] sm:p-4 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
               >
                 <div className="space-y-2">
                   <Skeleton className="h-4 w-36" />
-                  <Skeleton className="h-3 w-20" />
                   <Skeleton className="h-3 w-24" />
                 </div>
                 <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-                  <Skeleton className="h-7 w-20" rounded="rounded-full" />
+                  <Skeleton className="h-5 w-16" rounded="rounded-[3px]" />
                   <Skeleton className="h-4 w-16" />
-                  <Skeleton className="h-7 w-24" rounded="rounded-full" />
+                  <Skeleton className="h-6 w-20" rounded="rounded-[4px]" />
                 </div>
               </article>
             ))
           : expenses.map((expense) => (
-          <article
-            key={expense.id}
-            className="flex flex-col gap-3 rounded-2xl border border-violet-100/80 bg-violet-50/35 p-3 dark:border-slate-700 dark:bg-slate-800 sm:gap-4 sm:rounded-[24px] sm:p-4 sm:flex-row sm:items-center sm:justify-between"
-          >
-            <div>
-              <p className="font-medium text-slate-900 dark:text-slate-100">{expense.merchant}</p>
-              <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
-                {expense.reference}
-              </p>
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{expense.date}</p>
-            </div>
+              <article
+                key={expense.id}
+                className="flex flex-col gap-3 py-4 transition hover:bg-sunken/50 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-ink">
+                    {expense.merchant}
+                  </p>
+                  <p className="figure mt-1 text-[11px] uppercase tracking-[0.12em] text-ink-faint">
+                    {expense.reference} · {expense.date}
+                  </p>
+                </div>
 
-            <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-              <span className="inline-flex rounded-full border border-violet-100 bg-white px-3 py-1 text-xs font-medium text-violet-700 dark:border-slate-700 dark:bg-slate-800 dark:text-violet-300">
-                {expense.category}
-              </span>
-              <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                {expense.amount}
-              </span>
-              <StatusBadge status={expense.status} />
-            </div>
-          </article>
+                <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+                  <span className="rounded-[3px] border border-rule bg-sunken px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+                    {expense.category}
+                  </span>
+                  <span className="figure text-sm font-semibold text-ink">
+                    {expense.amount}
+                  </span>
+                  <StatusStamp status={expense.status} />
+                </div>
+              </article>
             ))}
 
         {!isLoading && expenses.length === 0 && (
-          <EmptyStateCard
-            eyebrow="Latest Activity"
-            title="No expenses yet"
-            description="Upload a receipt to get started and your recent activity will appear here."
-            actionLabel="Upload Receipt"
-            actionTo="/upload-receipt"
-          />
+          <div className="pt-4">
+            <EmptyStateCard
+              eyebrow="Latest Activity"
+              title="No expenses yet"
+              description="Upload a receipt to get started and your recent activity will appear here."
+              actionLabel="Upload Receipt"
+              actionTo="/upload-receipt"
+            />
+          </div>
         )}
       </div>
     </section>

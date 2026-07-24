@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import { ExpensesProvider } from './context/ExpensesContext'
-import Categories from './pages/Categories'
 import Dashboard from './pages/Dashboard'
 import Expenses from './pages/Expenses'
 import Settings from './pages/Settings'
@@ -31,6 +30,16 @@ function App() {
     localStorage.setItem(THEME_STORAGE_KEY, theme)
   }, [theme])
 
+  // Wake the free-tier backend as soon as the app loads so a receipt upload
+  // doesn't have to sit through the ~50s cold start.
+  useEffect(() => {
+    const apiUrl = import.meta.env.VITE_API_URL
+
+    if (apiUrl) {
+      fetch(`${apiUrl}/`).catch(() => {})
+    }
+  }, [])
+
   function toggleTheme() {
     setTheme((currentTheme) =>
       currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME,
@@ -45,7 +54,6 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="/upload-receipt" element={<UploadReceipt />} />
             <Route path="/expenses" element={<Expenses />} />
-            <Route path="/categories" element={<Categories />} />
             <Route
               path="/settings"
               element={
