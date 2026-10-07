@@ -4,6 +4,7 @@ import logging
 import os
 import re
 from io import BytesIO
+from pathlib import Path
 
 logger = logging.getLogger("receipt-flow")
 logging.basicConfig(level=logging.INFO)
@@ -11,6 +12,8 @@ logging.basicConfig(level=logging.INFO)
 try:
     from dotenv import load_dotenv
 
+    # .env.local takes precedence over .env (existing values aren't overridden).
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env.local")
     load_dotenv()
 except ImportError:
     pass
@@ -39,20 +42,23 @@ ALLOWED_CONTENT_TYPES = {
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".pdf"}
 EXPENSE_CATEGORIES = {"Food", "Travel", "Shopping", "Utilities", "Entertainment", "Other"}
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+# OpenRouter exposes an OpenAI-compatible API, so the OpenAI SDK works as-is
+# once it points at OpenRouter's base URL.
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini")
 client = (
-    OpenAI(api_key=OPENAI_API_KEY)
-    if OpenAI is not None and OPENAI_API_KEY
+    OpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+    if OpenAI is not None and OPENROUTER_API_KEY
     else None
 )
 
 logger.info(
     "AI extraction configured: sdk=%s key_present=%s key_length=%d model=%s",
     OpenAI is not None,
-    bool(OPENAI_API_KEY),
-    len(OPENAI_API_KEY or ""),
-    OPENAI_MODEL,
+    bool(OPENROUTER_API_KEY),
+    len(OPENROUTER_API_KEY or ""),
+    OPENROUTER_MODEL,
 )
 
 # In production the API is same-origin (/api/*); CORS is only needed for
@@ -91,14 +97,14 @@ def extract_with_ai(extracted_text: str) -> dict | None:
         return None
 
     try:
-        response = client.responses.create(
-            model=OPENAI_MODEL,
-            input=[
+        response = client.chat.completions.create(
+            model=OPENROUTER_MODEL,
+            messages=[
                 {"role": "system", "content": AI_RECEIPT_PROMPT},
                 {"role": "user", "content": f"Receipt text:\n{extracted_text}"},
             ],
         )
-        response_text = strip_markdown_fences(response.output_text)
+        response_text = strip_markdown_fences(response.choices[0].message.content)
         parsed = json.loads(response_text)
     except Exception:
         logger.exception("Structured extraction call failed")
@@ -182,28 +188,30 @@ def transcribe_image_with_ai(file_bytes: bytes, content_type: str | None, filena
     encoded_image = base64.b64encode(file_bytes).decode("ascii")
 
     try:
-        response = client.responses.create(
-            model=OPENAI_MODEL,
-            input=[
+        response = client.chat.completions.create(
+            model=OPENROUTER_MODEL,
+            messages=[
                 {
                     "role": "user",
                     "content": [
                         {
-                            "type": "input_text",
+                            "type": "text",
                             "text": (
                                 "Transcribe every line of text on this receipt "
                                 "exactly as printed. Return plain text only."
                             ),
                         },
                         {
-                            "type": "input_image",
-                            "image_url": f"data:{mime_type};base64,{encoded_image}",
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:{mime_type};base64,{encoded_image}",
+                            },
                         },
                     ],
                 }
             ],
         )
-        return strip_markdown_fences(response.output_text)
+        return strip_markdown_fences(response.choices[0].message.content)
     except Exception:
         logger.exception("Image transcription call failed")
         return ""
