@@ -8,7 +8,7 @@ Upload a receipt image or PDF, review the extracted entry, and post it to the le
 
 ## Features
 
-- AI receipt extraction (OpenAI) for images and PDFs — merchant, date, total, category, and line items
+- AI receipt extraction (via OpenRouter) for images and PDFs — merchant, date, total, category, and line items
 - Manual expense entry without requiring a file upload
 - Sample ledger seeded on first visit, so the demo never opens empty
 - Local persistence via localStorage — your uploads, edits, and voids survive a refresh
@@ -30,12 +30,12 @@ Upload a receipt image or PDF, review the extracted entry, and post it to the le
 ## Tech Stack
 
 - **Frontend:** React, Vite, Tailwind CSS v4
-- **Backend:** FastAPI (Python serverless function), OpenAI, pypdf
+- **Backend:** FastAPI (Python serverless function), OpenRouter (OpenAI SDK), pypdf
 - **Hosting:** everything on Vercel — the frontend and the `/api` function deploy together from one repo
 
 ## How It Works
 
-1. Upload a receipt (JPG, PNG, WEBP, or PDF). Large photos are downscaled in the browser first; the API extracts the text — pypdf for PDFs, the vision model for photos — and OpenAI turns it into a structured expense.
+1. Upload a receipt (JPG, PNG, WEBP, or PDF). Large photos are downscaled in the browser first; the API extracts the text — pypdf for PDFs, the vision model for photos — and the AI model (via OpenRouter) turns it into a structured expense.
 2. Review the prefilled form, adjust anything, and post it to the ledger.
 3. Or skip the file entirely and enter the expense manually.
 
@@ -53,7 +53,7 @@ pip install -r requirements.txt
 uvicorn api.index:app --reload --port 8000
 ```
 
-`.env.development` points the frontend at `http://localhost:8000`. Copy `.env.example` to `.env` and set `OPENAI_API_KEY` for AI extraction (without it, PDFs fall back to regex parsing and photos return placeholder data).
+`.env.development` points the frontend at `http://localhost:8000`. Copy `.env.example` to `.env.local` and set `OPENROUTER_API_KEY` for AI extraction (without it, PDFs fall back to regex parsing and photos return placeholder data).
 
 ## 📸 Screenshots
 
